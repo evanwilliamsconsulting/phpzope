@@ -1,0 +1,1077 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="">
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="viewport" content="width=1020">
+    
+    
+    <title>FriendsOfPHP/pickle: PHP Extension installer - GitHub</title>
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
+    <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144.png">
+    <meta property="fb:app_id" content="1401488693436528">
+
+      <meta content="@github" name="twitter:site" /><meta content="summary" name="twitter:card" /><meta content="FriendsOfPHP/pickle" name="twitter:title" /><meta content="pickle - PHP Extension installer" name="twitter:description" /><meta content="https://avatars1.githubusercontent.com/u/5947812?v=3&amp;s=400" name="twitter:image:src" />
+      <meta content="GitHub" property="og:site_name" /><meta content="object" property="og:type" /><meta content="https://avatars1.githubusercontent.com/u/5947812?v=3&amp;s=400" property="og:image" /><meta content="FriendsOfPHP/pickle" property="og:title" /><meta content="https://github.com/FriendsOfPHP/pickle" property="og:url" /><meta content="pickle - PHP Extension installer" property="og:description" />
+      <meta name="browser-stats-url" content="https://api.github.com/_private/browser/stats">
+    <meta name="browser-errors-url" content="https://api.github.com/_private/browser/errors">
+    <link rel="assets" href="https://assets-cdn.github.com/">
+    
+    <meta name="pjax-timeout" content="1000">
+    
+
+    <meta name="msapplication-TileImage" content="/windows-tile.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="selected-link" value="repo_source" data-pjax-transient>
+
+    <meta name="google-site-verification" content="KT5gs8h0wvaagLKAVWq8bbeNwnZZK1r1XQysX3xurLU">
+    <meta name="google-analytics" content="UA-3769691-2">
+
+<meta content="collector.githubapp.com" name="octolytics-host" /><meta content="github" name="octolytics-app-id" /><meta content="45F80A9C:10EE:A5DFF1E:569D5644" name="octolytics-dimension-request_id" />
+<meta content="/&lt;user-name&gt;/&lt;repo-name&gt;" data-pjax-transient="true" name="analytics-location" />
+<meta content="Rails, view, files#disambiguate" data-pjax-transient="true" name="analytics-event" />
+
+
+  <meta class="js-ga-set" name="dimension1" content="Logged Out">
+
+
+
+        <meta name="hostname" content="github.com">
+    <meta name="user-login" content="">
+
+        <meta name="expected-hostname" content="github.com">
+
+      <link rel="mask-icon" href="https://assets-cdn.github.com/pinned-octocat.svg" color="#4078c0">
+      <link rel="icon" type="image/x-icon" href="https://assets-cdn.github.com/favicon.ico">
+
+    <meta content="55091eb0f96f9f459624356ad1d540885b53c787" name="form-nonce" />
+
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github-1b53a0bcb9add868a6c5ae469ecabb8b236ffa8f2b05360fde027f75eb714f1b.css" media="all" rel="stylesheet" />
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github2-70af51f1bed4904749e6ef486ad11871c8ce4361ac82bb5f96a090b7f5346580.css" media="all" rel="stylesheet" />
+    
+    
+
+
+    <meta http-equiv="x-pjax-version" content="dd1646b27509d9a0274507451912e882">
+
+      
+  <meta name="description" content="pickle - PHP Extension installer">
+  <meta name="go-import" content="github.com/FriendsOfPHP/pickle git https://github.com/FriendsOfPHP/pickle.git">
+
+  <meta content="5947812" name="octolytics-dimension-user_id" /><meta content="FriendsOfPHP" name="octolytics-dimension-user_login" /><meta content="20719020" name="octolytics-dimension-repository_id" /><meta content="FriendsOfPHP/pickle" name="octolytics-dimension-repository_nwo" /><meta content="true" name="octolytics-dimension-repository_public" /><meta content="false" name="octolytics-dimension-repository_is_fork" /><meta content="20719020" name="octolytics-dimension-repository_network_root_id" /><meta content="FriendsOfPHP/pickle" name="octolytics-dimension-repository_network_root_nwo" />
+  <link href="https://github.com/FriendsOfPHP/pickle/commits/master.atom" rel="alternate" title="Recent Commits to pickle:master" type="application/atom+xml">
+
+  </head>
+
+
+  <body class="logged_out   env-production  vis-public">
+    <a href="#start-of-content" tabindex="1" class="accessibility-aid js-skip-to-content">Skip to content</a>
+
+    
+    
+    
+
+
+
+      
+      <div class="header header-logged-out" role="banner">
+  <div class="container clearfix">
+
+    <a class="header-logo-wordmark" href="https://github.com/" data-ga-click="(Logged out) Header, go to homepage, icon:logo-wordmark">
+      <span aria-hidden="true" class="mega-octicon octicon-logo-github"></span>
+    </a>
+
+    <div class="header-actions" role="navigation">
+        <a class="btn btn-primary" href="/join" data-ga-click="(Logged out) Header, clicked Sign up, text:sign-up">Sign up</a>
+      <a class="btn" href="/login?return_to=%2FFriendsOfPHP%2Fpickle" data-ga-click="(Logged out) Header, clicked Sign in, text:sign-in">Sign in</a>
+    </div>
+
+    <div class="site-search repo-scope js-site-search" role="search">
+      <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/FriendsOfPHP/pickle/search" class="js-site-search-form" data-global-search-url="/search" data-repo-search-url="/FriendsOfPHP/pickle/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+  <label class="js-chromeless-input-container form-control">
+    <div class="scope-badge">This repository</div>
+    <input type="text"
+      class="js-site-search-focus js-site-search-field is-clearable chromeless-input"
+      data-hotkey="s"
+      name="q"
+      placeholder="Search"
+      aria-label="Search this repository"
+      data-global-scope-placeholder="Search GitHub"
+      data-repo-scope-placeholder="Search"
+      tabindex="1"
+      autocapitalize="off">
+  </label>
+</form>
+    </div>
+
+      <ul class="header-nav left" role="navigation">
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="/explore" data-ga-click="(Logged out) Header, go to explore, text:explore">Explore</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="/features" data-ga-click="(Logged out) Header, go to features, text:features">Features</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="https://enterprise.github.com/" data-ga-click="(Logged out) Header, go to enterprise, text:enterprise">Enterprise</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="/pricing" data-ga-click="(Logged out) Header, go to pricing, text:pricing">Pricing</a>
+          </li>
+      </ul>
+
+  </div>
+</div>
+
+
+
+    <div id="start-of-content" class="accessibility-aid"></div>
+
+      <div id="js-flash-container">
+</div>
+
+
+    <div role="main" class="main-content">
+        <div itemscope itemtype="http://schema.org/WebPage">
+    <div id="js-repo-pjax-container" class="context-loader-container js-repo-nav-next" data-pjax-container>
+      
+<div class="pagehead repohead instapaper_ignore readability-menu experiment-repo-nav">
+  <div class="container repohead-details-container">
+
+    
+
+<ul class="pagehead-actions">
+
+  <li>
+      <a href="/login?return_to=%2FFriendsOfPHP%2Fpickle"
+    class="btn btn-sm btn-with-count tooltipped tooltipped-n"
+    aria-label="You must be signed in to watch a repository" rel="nofollow">
+    <span aria-hidden="true" class="octicon octicon-eye"></span>
+    Watch
+  </a>
+  <a class="social-count" href="/FriendsOfPHP/pickle/watchers">
+    48
+  </a>
+
+  </li>
+
+  <li>
+      <a href="/login?return_to=%2FFriendsOfPHP%2Fpickle"
+    class="btn btn-sm btn-with-count tooltipped tooltipped-n"
+    aria-label="You must be signed in to star a repository" rel="nofollow">
+    <span aria-hidden="true" class="octicon octicon-star"></span>
+    Star
+  </a>
+
+    <a class="social-count js-social-count" href="/FriendsOfPHP/pickle/stargazers">
+      696
+    </a>
+
+  </li>
+
+  <li>
+      <a href="/login?return_to=%2FFriendsOfPHP%2Fpickle"
+        class="btn btn-sm btn-with-count tooltipped tooltipped-n"
+        aria-label="You must be signed in to fork a repository" rel="nofollow">
+        <span aria-hidden="true" class="octicon octicon-repo-forked"></span>
+        Fork
+      </a>
+
+    <a href="/FriendsOfPHP/pickle/network" class="social-count">
+      28
+    </a>
+  </li>
+</ul>
+
+    <h1 itemscope itemtype="http://data-vocabulary.org/Breadcrumb" class="entry-title public ">
+  <span aria-hidden="true" class="octicon octicon-repo"></span>
+  <span class="author"><a href="/FriendsOfPHP" class="url fn" itemprop="url" rel="author"><span itemprop="title">FriendsOfPHP</span></a></span><!--
+--><span class="path-divider">/</span><!--
+--><strong><a href="/FriendsOfPHP/pickle" data-pjax="#js-repo-pjax-container">pickle</a></strong>
+
+  <span class="page-context-loader">
+    <img alt="" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+  </span>
+
+</h1>
+
+  </div>
+  <div class="container">
+    
+<nav class="reponav js-repo-nav js-sidenav-container-pjax js-octicon-loaders"
+     role="navigation"
+     data-pjax="#js-repo-pjax-container">
+
+  <a href="/FriendsOfPHP/pickle" aria-label="Code" aria-selected="true" class="js-selected-navigation-item selected reponav-item" data-hotkey="g c" data-selected-links="repo_source repo_downloads repo_commits repo_releases repo_tags repo_branches /FriendsOfPHP/pickle">
+    <span aria-hidden="true" class="octicon octicon-code"></span>
+    Code
+</a>
+    <a href="/FriendsOfPHP/pickle/issues" class="js-selected-navigation-item reponav-item" data-hotkey="g i" data-selected-links="repo_issues repo_labels repo_milestones /FriendsOfPHP/pickle/issues">
+      <span aria-hidden="true" class="octicon octicon-issue-opened"></span>
+      Issues
+      <span class="counter">22</span>
+</a>
+  <a href="/FriendsOfPHP/pickle/pulls" class="js-selected-navigation-item reponav-item" data-hotkey="g p" data-selected-links="repo_pulls /FriendsOfPHP/pickle/pulls">
+    <span aria-hidden="true" class="octicon octicon-git-pull-request"></span>
+    Pull requests
+    <span class="counter">0</span>
+</a>
+    <a href="/FriendsOfPHP/pickle/wiki" class="js-selected-navigation-item reponav-item" data-hotkey="g w" data-selected-links="repo_wiki /FriendsOfPHP/pickle/wiki">
+      <span aria-hidden="true" class="octicon octicon-book"></span>
+      Wiki
+</a>
+  <a href="/FriendsOfPHP/pickle/pulse" class="js-selected-navigation-item reponav-item" data-selected-links="pulse /FriendsOfPHP/pickle/pulse">
+    <span aria-hidden="true" class="octicon octicon-pulse"></span>
+    Pulse
+</a>
+  <a href="/FriendsOfPHP/pickle/graphs" class="js-selected-navigation-item reponav-item" data-selected-links="repo_graphs repo_contributors /FriendsOfPHP/pickle/graphs">
+    <span aria-hidden="true" class="octicon octicon-graph"></span>
+    Graphs
+</a>
+
+</nav>
+
+  </div>
+</div>
+
+<div class="container new-discussion-timeline experiment-repo-nav">
+  <div class="repository-content">
+
+    
+<div class="repository-meta js-details-container">
+  <span class="repository-meta-content">
+        PHP Extension installer
+  </span>
+
+</div>
+
+
+<div class="overall-summary overall-summary-bottomless">
+
+  <div class="stats-switcher-viewport js-stats-switcher-viewport">
+    <div class="stats-switcher-wrapper">
+    <ul class="numbers-summary">
+      <li class="commits">
+        <a data-pjax href="/FriendsOfPHP/pickle/commits/master">
+            <span aria-hidden="true" class="octicon octicon-history"></span>
+            <span class="num text-emphasized">
+              567
+            </span>
+            commits
+        </a>
+      </li>
+      <li>
+        <a data-pjax href="/FriendsOfPHP/pickle/branches">
+          <span aria-hidden="true" class="octicon octicon-git-branch"></span>
+          <span class="num text-emphasized">
+            3
+          </span>
+          branches
+        </a>
+      </li>
+
+      <li>
+        <a data-pjax href="/FriendsOfPHP/pickle/releases">
+          <span aria-hidden="true" class="octicon octicon-tag"></span>
+          <span class="num text-emphasized">
+            5
+          </span>
+          releases
+        </a>
+      </li>
+
+      <li>
+        
+  <a href="/FriendsOfPHP/pickle/graphs/contributors">
+    <span aria-hidden="true" class="octicon octicon-organization"></span>
+    <span class="num text-emphasized">
+      17
+    </span>
+    contributors
+  </a>
+      </li>
+    </ul>
+
+      <div class="repository-lang-stats">
+        <ol class="repository-lang-stats-numbers">
+          <li>
+              <a href="/FriendsOfPHP/pickle/search?l=php">
+                <span class="color-block language-color" style="background-color:#4F5D95;"></span>
+                <span class="lang">PHP</span>
+                <span class="percent">95.4%</span>
+              </a>
+          </li>
+          <li>
+              <a href="/FriendsOfPHP/pickle/search?l=cucumber">
+                <span class="color-block language-color" style="background-color:#ccc;"></span>
+                <span class="lang">Cucumber</span>
+                <span class="percent">4.6%</span>
+              </a>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  <div class="repository-lang-stats-graph js-toggle-lang-stats" title="Click for language details">
+    <span class="language-color" aria-label="PHP 95.4%" style="width:95.4%; background-color:#4F5D95;" itemprop="keywords">PHP</span>
+    <span class="language-color" aria-label="Cucumber 4.6%" style="width:4.6%; background-color:#ccc;" itemprop="keywords">Cucumber</span>
+  </div>
+
+<include-fragment src="/FriendsOfPHP/pickle/show_partial?partial=tree%2Frecently_touched_branches_list"></include-fragment>
+
+<div class="file-navigation in-mid-page file-navigation-new">
+  <div class="right">
+    <div class="btn-group">
+      
+  <button class="btn btn-sm disabled tooltipped tooltipped-n" aria-label="You must be signed in to make or propose changes" type="button">
+    New file
+  </button>
+
+
+
+      <a href="/FriendsOfPHP/pickle/find/master"
+        class="btn btn-sm empty-icon right js-show-file-finder"
+        data-pjax
+        data-hotkey="t"
+        data-ga-click="Repository, find file, location:repo overview">
+        Find file
+      </a>
+    </div>
+      <div class="file-navigation-options" data-multiple>
+
+        <div class="file-navigation-option">
+          <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol" class="js-set-user-protocol-preference" data-form-nonce="55091eb0f96f9f459624356ad1d540885b53c787" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="shMyaaHngg27yAQzaNLIB7O1b6k4IRrdozMc0i8jg7g4Dq9hwILELpfD4zO8bazW7RNMAXf4FpTa9RwT7MOG0A==" /></div>
+            <input type="hidden" name="protocol_type" value="clone">
+
+            <div class="select-menu js-menu-container js-select-menu">
+              <div class="input-group js-select-button js-zeroclipboard-container">
+                <div class="input-group-button">
+  <button type="button" class="btn btn-sm select-menu-button js-menu-target" data-ga-click="Repository, clone HTTPS, location:repo overview">
+    HTTPS
+  </button>
+</div>
+<input type="text" class="input-monospace input-mini js-zeroclipboard-target js-url-field" value="https://github.com/FriendsOfPHP/pickle.git" readonly>
+<div class="input-group-button">
+  <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span aria-hidden="true" class="octicon octicon-clippy"></span></button>
+</div>
+
+              </div>
+
+              <div class="select-menu-modal-holder">
+                <div class="select-menu-modal js-menu-content" aria-hidden="true">
+                  <div class="select-menu-header">
+                    <span aria-label="Close" class="octicon octicon-x js-menu-close" role="button"></span>
+                    <span class="select-menu-title">Choose a clone URL</span>
+                  </div>
+
+                  <div class="select-menu-list js-navigation-container" role="menu">
+                      <div class="select-menu-item js-navigation-item selected" role="menuitem" tabindex="0">
+                        <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+                        <div class="select-menu-item-text">
+                          <input type="radio" name="protocol_selector" value="http" checked>
+                          <span class="select-menu-item-heading">
+                            HTTPS
+                            (recommended)
+                          </span>
+                            <span class="description">
+                              Clone with Git or checkout with SVN using the repository's web address.
+                            </span>
+                          <span class="js-select-button-text hidden-select-button-text">
+                            <div class="input-group-button">
+  <button type="button" class="btn btn-sm select-menu-button js-menu-target" data-ga-click="Repository, clone HTTPS, location:repo overview">
+    HTTPS
+  </button>
+</div>
+<input type="text" class="input-monospace input-mini js-zeroclipboard-target js-url-field" value="https://github.com/FriendsOfPHP/pickle.git" readonly>
+<div class="input-group-button">
+  <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span aria-hidden="true" class="octicon octicon-clippy"></span></button>
+</div>
+
+                          </span>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="select-menu-list" role="menu">
+                    <a class="select-menu-item select-menu-action" href="https://help.github.com/articles/which-remote-url-should-i-use" target="_blank">
+                      <span aria-hidden="true" class="octicon octicon-question select-menu-item-icon"></span>
+                      <div class="select-menu-item-text">
+                        Learn more about clone URLs
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+</form>        </div>
+
+        <div class="file-navigation-option">
+</div>
+
+
+        <div class="file-navigation-option">
+          <a href="/FriendsOfPHP/pickle/archive/master.zip"
+             class="btn btn-sm"
+             rel="nofollow"
+             data-ga-click="Repository, download zip, location:repo overview">
+            Download ZIP
+          </a>
+        </div>
+      </div>
+  </div>
+
+  
+<div class="select-menu js-menu-container js-select-menu left">
+  <button class="btn btn-sm select-menu-button js-menu-target css-truncate" data-hotkey="w"
+    title="master"
+    type="button" aria-label="Switch branches or tags" tabindex="0" aria-haspopup="true">
+    <i>Branch:</i>
+    <span class="js-select-button css-truncate-target">master</span>
+  </button>
+
+  <div class="select-menu-modal-holder js-menu-content js-navigation-container" data-pjax aria-hidden="true">
+
+    <div class="select-menu-modal">
+      <div class="select-menu-header">
+        <span aria-label="Close" class="octicon octicon-x js-menu-close" role="button"></span>
+        <span class="select-menu-title">Switch branches/tags</span>
+      </div>
+
+      <div class="select-menu-filters">
+        <div class="select-menu-text-filter">
+          <input type="text" aria-label="Filter branches/tags" id="context-commitish-filter-field" class="js-filterable-field js-navigation-enable" placeholder="Filter branches/tags">
+        </div>
+        <div class="select-menu-tabs">
+          <ul>
+            <li class="select-menu-tab">
+              <a href="#" data-tab-filter="branches" data-filter-placeholder="Filter branches/tags" class="js-select-menu-tab" role="tab">Branches</a>
+            </li>
+            <li class="select-menu-tab">
+              <a href="#" data-tab-filter="tags" data-filter-placeholder="Find a tag…" class="js-select-menu-tab" role="tab">Tags</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="select-menu-list select-menu-tab-bucket js-select-menu-tab-bucket" data-tab-filter="branches" role="menu">
+
+        <div data-filterable-for="context-commitish-filter-field" data-filterable-type="substring">
+
+
+            <a class="select-menu-item js-navigation-item js-navigation-open "
+               href="/FriendsOfPHP/pickle/tree/deploy-phar"
+               data-name="deploy-phar"
+               data-skip-pjax="true"
+               rel="nofollow">
+              <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="deploy-phar">
+                deploy-phar
+              </span>
+            </a>
+            <a class="select-menu-item js-navigation-item js-navigation-open selected"
+               href="/FriendsOfPHP/pickle/tree/master"
+               data-name="master"
+               data-skip-pjax="true"
+               rel="nofollow">
+              <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="master">
+                master
+              </span>
+            </a>
+            <a class="select-menu-item js-navigation-item js-navigation-open "
+               href="/FriendsOfPHP/pickle/tree/perm-issues-config"
+               data-name="perm-issues-config"
+               data-skip-pjax="true"
+               rel="nofollow">
+              <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="perm-issues-config">
+                perm-issues-config
+              </span>
+            </a>
+        </div>
+
+          <div class="select-menu-no-results">Nothing to show</div>
+      </div>
+
+      <div class="select-menu-list select-menu-tab-bucket js-select-menu-tab-bucket" data-tab-filter="tags">
+        <div data-filterable-for="context-commitish-filter-field" data-filterable-type="substring">
+
+
+            <a class="select-menu-item js-navigation-item js-navigation-open "
+              href="/FriendsOfPHP/pickle/tree/v0.4.0"
+              data-name="v0.4.0"
+              data-skip-pjax="true"
+              rel="nofollow">
+              <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="v0.4.0">
+                v0.4.0
+              </span>
+            </a>
+            <a class="select-menu-item js-navigation-item js-navigation-open "
+              href="/FriendsOfPHP/pickle/tree/v0.3.0"
+              data-name="v0.3.0"
+              data-skip-pjax="true"
+              rel="nofollow">
+              <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="v0.3.0">
+                v0.3.0
+              </span>
+            </a>
+            <a class="select-menu-item js-navigation-item js-navigation-open "
+              href="/FriendsOfPHP/pickle/tree/v0.2.0"
+              data-name="v0.2.0"
+              data-skip-pjax="true"
+              rel="nofollow">
+              <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="v0.2.0">
+                v0.2.0
+              </span>
+            </a>
+            <a class="select-menu-item js-navigation-item js-navigation-open "
+              href="/FriendsOfPHP/pickle/tree/v0.1.1"
+              data-name="v0.1.1"
+              data-skip-pjax="true"
+              rel="nofollow">
+              <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="v0.1.1">
+                v0.1.1
+              </span>
+            </a>
+            <a class="select-menu-item js-navigation-item js-navigation-open "
+              href="/FriendsOfPHP/pickle/tree/v0.1.0"
+              data-name="v0.1.0"
+              data-skip-pjax="true"
+              rel="nofollow">
+              <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="v0.1.0">
+                v0.1.0
+              </span>
+            </a>
+        </div>
+
+        <div class="select-menu-no-results">Nothing to show</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+    <a href="/FriendsOfPHP/pickle/pull/new/master" class="btn btn-sm btn-primary" data-pjax data-ga-click="Repository, new pull request, location:repo overview">
+      New pull request
+    </a>
+
+  <div class="breadcrumb">
+    
+  </div>
+</div>
+
+
+
+
+  <div class="commit-tease js-details-container">
+    <span class="right">
+      Latest commit
+      <a class="commit-tease-sha" href="/FriendsOfPHP/pickle/commit/2f1b84ca8612c410716dc7cc1651aa226edbba2c" data-pjax>
+        2f1b84c
+      </a>
+      <time datetime="2016-01-18T08:01:28Z" is="relative-time">Jan 18, 2016</time>
+    </span>
+
+
+    <span class="commit-author-section">
+      <img alt="@jubianchi" class="avatar" height="20" src="https://avatars3.githubusercontent.com/u/327237?v=3&amp;s=40" width="20" />
+      <a href="/jubianchi" class="user-mention" rel="contributor">jubianchi</a>
+    </span>
+
+        <a href="/FriendsOfPHP/pickle/commit/2f1b84ca8612c410716dc7cc1651aa226edbba2c" class="message" data-pjax="true" title="Merge pull request #138 from FriendsOfPHP/deploy-phar
+
+Automatically deploy PHAR on new tags">Merge pull request</a> <a href="https://github.com/FriendsOfPHP/pickle/pull/138" class="issue-link js-issue-link" data-url="https://github.com/FriendsOfPHP/pickle/issues/138" data-id="124590998" data-error-text="Failed to load issue title" data-permission-text="Issue title is private">#138</a> <a href="/FriendsOfPHP/pickle/commit/2f1b84ca8612c410716dc7cc1651aa226edbba2c" class="message" data-pjax="true" title="Merge pull request #138 from FriendsOfPHP/deploy-phar
+
+Automatically deploy PHAR on new tags">from FriendsOfPHP/deploy-phar</a>
+          <span class="hidden-text-expander inline">
+            <a href="#" class="js-details-target">…</a>
+          </span>
+    </span>
+
+      <div class="commit-desc"><pre class="text-small">Automatically deploy PHAR on new tags</pre></div>
+  </div>
+
+
+<div class="file-wrap ">
+
+  <a href="/FriendsOfPHP/pickle/tree/2f1b84ca8612c410716dc7cc1651aa226edbba2c" class="hidden js-permalink-shortcut" data-hotkey="y">Permalink</a>
+
+  <table class="files js-navigation-container js-active-navigation-container" data-pjax>
+
+
+    <tbody>
+      <tr class="warning include-fragment-error">
+        <td class="icon"><span aria-hidden="true" class="octicon octicon-alert"></span></td>
+        <td class="content" colspan="3">Failed to load latest commit information.</td>
+      </tr>
+
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/tree/master/bin" class="js-directory-link js-navigation-open" id="c1111bd512b29e821b120b86446026b8-be0035f334d5774fd39da6e98e82d6850ccc36b6" title="bin">bin</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/409de790e9e30b0337b79dbd968778a4a67426db" class="message" data-pjax="true" title="Use padraic/phar-updater to handle PAHR updates">Use padraic/phar-updater to handle PAHR updates</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2016-01-01T22:12:11Z" is="time-ago">Jan 1, 2016</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/tree/master/features" class="js-directory-link js-navigation-open" id="9f034b63948763d489f944319c2eb3de-59b84e65d4a71c1acaf15e71b70d981c48876ac9" title="features">features</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/46947107158a4323fcb4d03d767e4d5df3a532df" class="message" data-pjax="true" title="Fix tests">Fix tests</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2016-01-02T12:37:09Z" is="time-ago">Jan 2, 2016</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/tree/master/src" class="js-directory-link js-navigation-open" id="25d902c24283ab8cfbac54dfa101ad31-8758c12d0b81522e91ba5e886fed43326d439c69" title="src">src</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/46947107158a4323fcb4d03d767e4d5df3a532df" class="message" data-pjax="true" title="Fix tests">Fix tests</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2016-01-02T12:37:09Z" is="time-ago">Jan 2, 2016</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/tree/master/tests" class="js-directory-link js-navigation-open" id="b61a6d542f9036550ba9c401c80f00ef-7b4711be567ec9c1ce812c1485f7500506e0c33b" title="tests">tests</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/802ba3176bbfdadd6e0beaf6d7bc3b2d69226d08" class="message" data-pjax="true" title="Fix permission issues
+
+Pickle now uses its own sandbox to download extensions&#39; sources
+
+Closes #123">Fix permission issues</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2015-11-24T08:55:53Z" is="time-ago">Nov 24, 2015</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-text"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/blob/master/.atoum.php" class="js-directory-link js-navigation-open" id="60bae8ffc653f68280e9753dd9acbc29-b0b7e847c8011e6fd4cc36e6e096adb1b502d918" title=".atoum.php">.atoum.php</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/5bef21f6a60fea31abd58ccad7bcb8df1f30bc0e" class="message" data-pjax="true" title="Disable xDebug and code coverage on PHP7">Disable xDebug and code coverage on PHP7</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2016-01-02T13:18:15Z" is="time-ago">Jan 2, 2016</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-text"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/blob/master/.bootstrap.atoum.php" class="js-directory-link js-navigation-open" id="e3a5fbd11f17f5c3806ba173fc6fe9e1-83e29c6f7d3c668f272fc5a3f3f63d892657c2c4" title=".bootstrap.atoum.php">.bootstrap.atoum.php</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/aa1aa13a2daa5535e4e5290c2d49078b2160dd67" class="message" data-pjax="true" title="Add the license file and blocks.">Add the license file and blocks.</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2015-10-26T08:34:16Z" is="time-ago">Oct 26, 2015</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-text"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/blob/master/.gitignore" class="js-directory-link js-navigation-open" id="a084b794bc0759e7a6b77810e01874f2-725280e5af44e50a1cf0882db50ff24a906dbe0f" title=".gitignore">.gitignore</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/409de790e9e30b0337b79dbd968778a4a67426db" class="message" data-pjax="true" title="Use padraic/phar-updater to handle PAHR updates">Use padraic/phar-updater to handle PAHR updates</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2016-01-01T22:12:11Z" is="time-ago">Jan 1, 2016</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-text"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/blob/master/.scrutinizer.yml" class="js-directory-link js-navigation-open" id="9cbd60c9b1418df594663892b0b740a7-5db3abf5637e19653f9ffda0704223b45733bf9c" title=".scrutinizer.yml">.scrutinizer.yml</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/7088bdaae48be32dd5936048150f2ae0558feb67" class="message" data-pjax="true" title="CRLF">CRLF</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2014-06-26T21:03:40Z" is="time-ago">Jun 26, 2014</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-text"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/blob/master/.travis.yml" class="js-directory-link js-navigation-open" id="354f30a63fb0907d4ad57269548329e3-00b9391ae9adb65ed92312d411fb3b53c9cda2dd" title=".travis.yml">.travis.yml</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/2f1b84ca8612c410716dc7cc1651aa226edbba2c" class="message" data-pjax="true" title="Merge pull request #138 from FriendsOfPHP/deploy-phar
+
+Automatically deploy PHAR on new tags">Merge pull request</a> <a href="https://github.com/FriendsOfPHP/pickle/pull/138" class="issue-link js-issue-link" data-url="https://github.com/FriendsOfPHP/pickle/issues/138" data-id="124590998" data-error-text="Failed to load issue title" data-permission-text="Issue title is private">#138</a> <a href="/FriendsOfPHP/pickle/commit/2f1b84ca8612c410716dc7cc1651aa226edbba2c" class="message" data-pjax="true" title="Merge pull request #138 from FriendsOfPHP/deploy-phar
+
+Automatically deploy PHAR on new tags">from FriendsOfPHP/deploy-phar</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2016-01-18T08:01:28Z" is="time-ago">Jan 18, 2016</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-text"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/blob/master/LICENSE" class="js-directory-link js-navigation-open" id="9879d6db96fd29134fc802214163b95a-2261045747240270ed264224e1546df5de7a2346" title="LICENSE">LICENSE</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/a43fdee0a17bb116c3f6be770133161177d6515a" class="message" data-pjax="true" title="Add the `LICENSE` file.">Add the `LICENSE` file.</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2015-10-26T14:31:59Z" is="time-ago">Oct 26, 2015</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-text"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/blob/master/README.md" class="js-directory-link js-navigation-open" id="04c6e90faac2675aa89e2176d2eec7d8-5142283191d25856406fd3dbc8c9af337c29963d" title="README.md">README.md</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/1756b1595e68788e3ec3976856cb219e5f244644" class="message" data-pjax="true" title="Use svg bade for code climate">Use svg bade for code climate</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2015-07-29T12:12:03Z" is="time-ago">Jul 29, 2015</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-text"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/blob/master/behat.yml" class="js-directory-link js-navigation-open" id="000c08c03fb7e7ea1a1b1dd5c6a1ce4e-92aca5e951f39cce32a2870c2dba8376057c73ee" title="behat.yml">behat.yml</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/0bd511c9710ad5d5b42069bbb5bde1e97fcf87e7" class="message" data-pjax="true" title="Rearrange behat features to avoid duplicate tests">Rearrange behat features to avoid duplicate tests</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2014-06-20T09:12:13Z" is="time-ago">Jun 20, 2014</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-text"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/blob/master/box.json.dist" class="js-directory-link js-navigation-open" id="e42cd21f6cb2eb2ebe113e66f62b78e0-2927f017c51946fe675e488c81f18923bf4b8cda" title="box.json.dist">box.json.dist</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/46947107158a4323fcb4d03d767e4d5df3a532df" class="message" data-pjax="true" title="Fix tests">Fix tests</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2016-01-02T12:37:09Z" is="time-ago">Jan 2, 2016</time></span>
+          </td>
+        </tr>
+        <tr class="js-navigation-item">
+          <td class="icon">
+            <span aria-hidden="true" class="octicon octicon-file-text"></span>
+            <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </td>
+          <td class="content">
+            <span class="css-truncate css-truncate-target"><a href="/FriendsOfPHP/pickle/blob/master/composer.json" class="js-directory-link js-navigation-open" id="b5d0ee8c97c7abd7e3fa29b9a27d1780-900b97662d1a8d77b3bb680bd4a8c83da7cc45c4" title="composer.json">composer.json</a></span>
+          </td>
+          <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/FriendsOfPHP/pickle/commit/409de790e9e30b0337b79dbd968778a4a67426db" class="message" data-pjax="true" title="Use padraic/phar-updater to handle PAHR updates">Use padraic/phar-updater to handle PAHR updates</a>
+            </span>
+          </td>
+          <td class="age">
+            <span class="css-truncate css-truncate-target"><time datetime="2016-01-01T22:12:11Z" is="time-ago">Jan 1, 2016</time></span>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+</div>
+
+
+
+  <div id="readme" class="boxed-group clearfix announce instapaper_body md">
+    <h3>
+      <span aria-hidden="true" class="octicon octicon-book"></span>
+      README.md
+    </h3>
+
+      <article class="markdown-body entry-content" itemprop="mainContentOfPage"><h1><a id="user-content-pickle---php-extension-installer-" class="anchor" href="#pickle---php-extension-installer-" aria-hidden="true"><span class="octicon octicon-link"></span></a>pickle - PHP Extension installer <a href="https://insight.sensiolabs.com/projects/7e153d04-79be-47e6-b2ee-60cdc2665dd5"><img src="https://camo.githubusercontent.com/cbc0382ad08e6aae100c06ca47849cdafdc232ac/68747470733a2f2f696e73696768742e73656e73696f6c6162732e636f6d2f70726f6a656374732f37653135336430342d373962652d343765362d623265652d3630636463323636356464352f736d616c6c2e706e67" alt="SensioLabsInsight" data-canonical-src="https://insight.sensiolabs.com/projects/7e153d04-79be-47e6-b2ee-60cdc2665dd5/small.png" style="max-width:100%;"></a></h1>
+
+<p>Pickle installs PHP extensions easily on all platforms.</p>
+
+<p><a href="https://codeclimate.com/github/FriendsOfPHP/pickle"><img src="https://camo.githubusercontent.com/86bf44165d45bcb112bca774f4ac10458ae7d64c/68747470733a2f2f636f6465636c696d6174652e636f6d2f6769746875622f467269656e64734f665048502f7069636b6c652e737667" alt="Code Climate" data-canonical-src="https://codeclimate.com/github/FriendsOfPHP/pickle.svg" style="max-width:100%;"></a>
+<a href="https://scrutinizer-ci.com/g/FriendsOfPHP/pickle/?branch=master"><img src="https://camo.githubusercontent.com/82e022936ecec942fb29b8296e34adc3ed8418ee/68747470733a2f2f7363727574696e697a65722d63692e636f6d2f672f467269656e64734f665048502f7069636b6c652f6261646765732f7175616c6974792d73636f72652e706e673f623d6d6173746572" alt="Scrutinizer Code Quality" data-canonical-src="https://scrutinizer-ci.com/g/FriendsOfPHP/pickle/badges/quality-score.png?b=master" style="max-width:100%;"></a>
+<a href="https://scrutinizer-ci.com/g/FriendsOfPHP/pickle/?branch=master"><img src="https://camo.githubusercontent.com/c3d38968886a0162d8bef9e3254e2da74938634f/68747470733a2f2f7363727574696e697a65722d63692e636f6d2f672f467269656e64734f665048502f7069636b6c652f6261646765732f636f7665726167652e706e673f623d6d6173746572" alt="Code Coverage" data-canonical-src="https://scrutinizer-ci.com/g/FriendsOfPHP/pickle/badges/coverage.png?b=master" style="max-width:100%;"></a>
+<a href="https://travis-ci.org/FriendsOfPHP/pickle"><img src="https://camo.githubusercontent.com/40489320986a122371b8e88166239fb13ee607f8/68747470733a2f2f7472617669732d63692e6f72672f467269656e64734f665048502f7069636b6c652e7376673f6272616e63683d6d6173746572" alt="Build Status" data-canonical-src="https://travis-ci.org/FriendsOfPHP/pickle.svg?branch=master" style="max-width:100%;"></a></p>
+
+<h2><a id="user-content-introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>Pickle is a new PHP extension installer. It is based on Composer and the plan is to get Composer to fully support it. See <a href="https://github.com/composer/composer/pull/2898#issuecomment-48439196">https://github.com/composer/composer/pull/2898#issuecomment-48439196</a> for the Composer part of the discussions.</p>
+
+<p>Pickle fully supports existing extensions in <a href="http://pecl.php.net">http://pecl.php.net</a>, running the following will install the latest available version of the memcache extension:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ bin/pickle install memcache</pre></div>
+
+<p>Windows is fully supported, to install binaries or from the sources (work in progress and given that you have a working build environment in place).</p>
+
+<p>The concept behind Pickle is to ease the life of both developers and end users.</p>
+
+<p>For end users, nothing changes much except that Pickle is based on modern concepts and works with multiple protocols (git or http(s) URLs).</p>
+
+<p>For developers, it drastically reduces the release work. Extension meta information is not duplicated anymore. Configuration options, files to package etc. are automatically fetched from the sources and the respective files are updated during the release process. There is no risk anymore of forgetting to update the version here or there, or to neglect to include a file.</p>
+
+<h2><a id="user-content-installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Clone this repository and install the dependencies with
+<a href="http://getcomposer.org/">Composer</a>:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ composer install</pre></div>
+
+<p>Or clone this repository, then run:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ <span class="pl-c1">cd</span> pickle
+$ composer install</pre></div>
+
+<p>A <a href="https://github.com/FriendsOfPHP/pickle/releases/download/v0.2.0/pickle.phar">phar is also available</a>.</p>
+
+<p>If you like to create your own phar from the pickle sources, you will need to install Box (<a href="http://box-project.org/">http://box-project.org/</a>). Then clone the repository and run the following commands:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ <span class="pl-c1">cd</span> pickle
+$ composer install --no-dev --optimize-autoloader
+$ php -d phar.<span class="pl-k">readonly</span>=0 box.phar build</pre></div>
+
+<h2><a id="user-content-usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Usage is pretty straightforward. For example, to install the memcache extension run the following command:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ bin/pickle install memcache</pre></div>
+
+<p>You can also use pickle from your extension directory, the following command:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ <span class="pl-c1">cd</span> myext
+$ bin/pickle install</pre></div>
+
+<p>A list of the commands is available using:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ bin/pickle list</pre></div>
+
+<p>To get extended help for a given command, use:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ bin/pickle <span class="pl-c1">help</span> install</pre></div>
+
+<p>To convert a package (based on package.xml current PECL installer), use:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ bin/pickle convert /home/pierre/myext/</pre></div>
+
+<p>Or run it from the extension source directory.</p>
+
+<h2><a id="user-content-contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>Fork the project, create a feature branch and send us a pull request.</p>
+
+<p>To ensure a consistent code base, you should make sure the code follows
+the <a href="http://www.php-fig.org/psr/psr-1/">PSR-1</a> and
+<a href="http://www.php-fig.org/psr/psr-2/">PSR-2</a> coding standards.</p>
+
+<p>To avoid CS issues, you should use <a href="http://cs.sensiolabs.org/">php-cs-fixer</a>:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ php-cs-fixer fix src/</pre></div>
+
+<h2><a id="user-content-support" class="anchor" href="#support" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support</h2>
+
+<p>Support is available via the <a href="https://github.com/FriendsOfPHP/pickle/issues">issue
+tracker</a> in the Github project page
+or via <a href="http://chat.efnet.org/">IRC, EFNet, channel <code>#pickle</code></a>.</p>
+
+<h2><a id="user-content-running-tests" class="anchor" href="#running-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running tests</h2>
+
+<p>Unit tests are written using <a href="https://github.com/atoum/atoum">atoum</a>.
+You will get atoum, among other dependencies, when running <code>composer install</code>.
+To run tests, you will need to run the following command:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ vendor/bin/atoum
+
+<span class="pl-c"># To run tests in a loop, ideal to do TDD</span>
+$ vendor/bin/atoum --loop</pre></div>
+
+<p>There are also some <a href="https://github.com/behat/behat">Behat</a> tests.
+You will get Behat, among other dependencies, when running <code>composer install</code>.
+To run tests, you will need to run the following command:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ vendor/bin/behat
+
+<span class="pl-c"># To choose the test suite you want to run</span>
+$ vendor/bin/behat -s pickle</pre></div>
+
+<p>Pickle is covered using 4 Behat tests suites:</p>
+
+<ul>
+<li><code>pickle</code> runs tests against pickle's sources</li>
+<li><code>pickle_phar</code> runs tests against pickle's Phar which you have to manually
+build</li>
+<li><code>pecl</code> tests PECL extensions conversion with pickle's sources</li>
+<li><code>phar_pecl</code> tests PECL extensions conversion with pickle's Phar</li>
+</ul>
+</article>
+  </div>
+
+
+  </div>
+  <div class="modal-backdrop"></div>
+</div>
+
+    </div>
+  </div>
+
+    </div>
+
+        <div class="container">
+  <div class="site-footer" role="contentinfo">
+    <ul class="site-footer-links right">
+        <li><a href="https://status.github.com/" data-ga-click="Footer, go to status, text:status">Status</a></li>
+      <li><a href="https://developer.github.com" data-ga-click="Footer, go to api, text:api">API</a></li>
+      <li><a href="https://training.github.com" data-ga-click="Footer, go to training, text:training">Training</a></li>
+      <li><a href="https://shop.github.com" data-ga-click="Footer, go to shop, text:shop">Shop</a></li>
+        <li><a href="https://github.com/blog" data-ga-click="Footer, go to blog, text:blog">Blog</a></li>
+        <li><a href="https://github.com/about" data-ga-click="Footer, go to about, text:about">About</a></li>
+        <li><a href="https://github.com/pricing" data-ga-click="Footer, go to pricing, text:pricing">Pricing</a></li>
+
+    </ul>
+
+    <a href="https://github.com" aria-label="Homepage">
+      <span aria-hidden="true" class="mega-octicon octicon-mark-github" title="GitHub "></span>
+</a>
+    <ul class="site-footer-links">
+      <li>&copy; 2016 <span title="0.06692s from github-fe125-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+        <li><a href="https://github.com/site/terms" data-ga-click="Footer, go to terms, text:terms">Terms</a></li>
+        <li><a href="https://github.com/site/privacy" data-ga-click="Footer, go to privacy, text:privacy">Privacy</a></li>
+        <li><a href="https://github.com/security" data-ga-click="Footer, go to security, text:security">Security</a></li>
+        <li><a href="https://github.com/contact" data-ga-click="Footer, go to contact, text:contact">Contact</a></li>
+        <li><a href="https://help.github.com" data-ga-click="Footer, go to help, text:help">Help</a></li>
+    </ul>
+  </div>
+</div>
+
+
+
+    
+    
+    
+
+    <div id="ajax-error-message" class="flash flash-error">
+      <span aria-hidden="true" class="octicon octicon-alert"></span>
+      <button type="button" class="flash-close js-flash-close js-ajax-error-dismiss" aria-label="Dismiss error">
+        <span aria-hidden="true" class="octicon octicon-x"></span>
+      </button>
+      Something went wrong with that request. Please try again.
+    </div>
+
+
+      <script crossorigin="anonymous" src="https://assets-cdn.github.com/assets/frameworks-2895475c714f13790b63e636b5389a6918a260259c5b22a15acf5ef26bd6ef09.js"></script>
+      <script async="async" crossorigin="anonymous" src="https://assets-cdn.github.com/assets/github-5406bc34554f34d81dde66f99b1ed423d62a9b8f1fd48ef2fae1db98efe167e9.js"></script>
+      
+      
+      
+    <div class="js-stale-session-flash stale-session-flash flash flash-warn flash-banner hidden">
+      <span aria-hidden="true" class="octicon octicon-alert"></span>
+      <span class="signed-in-tab-flash">You signed in with another tab or window. <a href="">Reload</a> to refresh your session.</span>
+      <span class="signed-out-tab-flash">You signed out in another tab or window. <a href="">Reload</a> to refresh your session.</span>
+    </div>
+    <div class="facebox" id="facebox" style="display:none;">
+  <div class="facebox-popup">
+    <div class="facebox-content" role="dialog" aria-labelledby="facebox-header" aria-describedby="facebox-description">
+    </div>
+    <button type="button" class="facebox-close js-facebox-close" aria-label="Close modal">
+      <span aria-hidden="true" class="octicon octicon-x"></span>
+    </button>
+  </div>
+</div>
+
+  </body>
+</html>
+

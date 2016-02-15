@@ -1,0 +1,9 @@
+Using
+
+../../backup/src0/readpickle outputs pickle representation very
+similar to
+
+php test.php.
+
+
+Now try to modify readpickle to output exact input to php unserialize!
