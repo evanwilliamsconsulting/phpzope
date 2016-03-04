@@ -1,0 +1,21 @@
+ccopy_reg
+__newobj__
+p0
+(cWordage
+Wordage
+p1
+tp2
+Rp3
+(dp4
+S'username'
+p5
+S'ewilliams'
+p6
+sS'_columnsize'
+p7
+I45
+sS'_wordage'
+p8
+S'Hello.  There once lived a man in a house.'
+p9
+sb.

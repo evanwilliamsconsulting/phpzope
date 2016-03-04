@@ -1,6 +1,5 @@
 <?php
 
-dl('hello.so');
 
 function say()
 {

@@ -1,0 +1,8 @@
+phpzope.lo: /zodb/nhpdb/phpzope/phpzope.cc
+	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/zodb/nhpdb/phpzope $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /zodb/nhpdb/phpzope/phpzope.cc -o phpzope.lo 
+$(phplibdir)/phpzope.la: ./phpzope.la
+	$(LIBTOOL) --mode=install cp ./phpzope.la $(phplibdir)
+
+./phpzope.la: $(shared_objects_phpzope) $(PHPZOPE_SHARED_DEPENDENCIES)
+	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_phpzope) $(PHPZOPE_SHARED_LIBADD)
+
