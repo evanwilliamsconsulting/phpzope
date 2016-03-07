@@ -3,6 +3,7 @@
 class PHPZope {
 public:
     PHPZope();
+    ~PHPZope();
     int returnValue();
 private:
     char *filename;
@@ -10,6 +11,9 @@ private:
 
 
 PHPZope::PHPZope() {
+}
+
+PHPZope::~PHPZope() {
 }
 
 int PHPZope::returnValue() {
@@ -88,7 +92,7 @@ zend_function_entry phpzope_methods[] = {
 	{NULL, NULL, NULL}
 };
 
-PHP_MINIT_FUNCTION(phpzopes)
+PHP_MINIT_FUNCTION(phpzope)
 {
     zend_class_entry ce;
     INIT_CLASS_ENTRY(ce, "PHPZope", phpzope_methods);
@@ -100,13 +104,13 @@ PHP_MINIT_FUNCTION(phpzopes)
     return SUCCESS;
 }
 
-zend_module_entry vehicles_module_entry = {
+zend_module_entry phpzope_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
     STANDARD_MODULE_HEADER,
 #endif
     PHPZOPE_EXTNAME,
     NULL,        /* Functions */
-    PHP_MINIT(phpzopes),        /* MINIT */
+    PHP_MINIT(phpzope),        /* MINIT */
     NULL,        /* MSHUTDOWN */
     NULL,        /* RINIT */
     NULL,        /* RSHUTDOWN */
@@ -117,7 +121,7 @@ zend_module_entry vehicles_module_entry = {
     STANDARD_MODULE_PROPERTIES
 };
 
-#ifdef COMPILE_DL_VEHICLES
+#ifdef COMPILE_DL_PHPZOPE
 extern "C" {
 ZEND_GET_MODULE(phpzope)
 }

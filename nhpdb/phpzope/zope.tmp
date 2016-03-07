@@ -1,0 +1,7 @@
+<?php
+
+    $zope = new PHPZope();
+
+    print_r($zope);
+
+?>
