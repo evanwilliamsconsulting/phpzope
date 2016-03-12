@@ -31,7 +31,7 @@ zend_class_entry *phpzope_ce;
 void phpzope_free_storage(void *object TSRMLS_DC)
 {
     phpzope_object *obj = (phpzope_object *)object;
-    delete &(obj->phpzope); 
+    //delete &(obj->phpzope); 
 
     zend_hash_destroy(obj->std.properties);
     FREE_HASHTABLE(obj->std.properties);
