@@ -1,5 +1,4 @@
 #include "basics.h"
-#include "stackitem.h" 
 
 using namespace std;
 
@@ -60,7 +59,7 @@ enum pycodes {
   OPCODE_COUNT
 };
 
-typedef int (*fn)(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
+typedef int (*fn)(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
 
 using namespace std;
 
@@ -76,59 +75,59 @@ using namespace std;
 		    void setModule(std::string inModule);
 		    void setName(std::string inName); 
 		    void setPid(std::string inPid);
-		    static int fnSTOP(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-	    static int fnMARK(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnPOP(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnPOP_MARK(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnDUP(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnFLOAT(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnINT(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnBININT(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnBININT1(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnLONG(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnBININT2(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnNONE(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnPERSID(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnBINPERSID(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnREDUCE(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnSTRING(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnBINSTRING(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnSHORT_BINSTRING(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnUNICODE(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnBINUNICODE(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnAPPEND(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);  
-            static int fnBUILD(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);  
-            static int fnGLOBAL(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnDICT(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnEMPTY_DICT(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnAPPENDS(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnGET(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);    
-            static int fnBINGET(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnINST(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack); 
-            static int fnLONG_BINGET(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnLIST(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);     
-            static int fnEMPTY_LIST(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnOBJ(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);     
-            static int fnPUT(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);    
-            static int fnBINPUT(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnLONG_BINPUT(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnSETITEM(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);  
-            static int fnTUPLE(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);   
-            static int fnEMPTY_TUPLE(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnSETITEMS(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack); 
-            static int fnBINFLOAT(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnPROTO(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);  
-            static int fnNEWOBJ(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnEXT1(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack); 
-            static int fnEXT2(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnEXT4(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnTUPLE1(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnTUPLE2(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnTUPLE3(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnTRUE(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnFALSE(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnLONG1(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
-            static int fnLONG4(std::string str1,std::string::iterator &it1,void *classPtr,stack<StackItem> *theStack);
+		    static int fnSTOP(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+	    static int fnMARK(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnPOP(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnPOP_MARK(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnDUP(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnFLOAT(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnINT(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnBININT(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnBININT1(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnLONG(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnBININT2(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnNONE(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnPERSID(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnBINPERSID(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnREDUCE(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnSTRING(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnBINSTRING(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnSHORT_BINSTRING(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnUNICODE(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnBINUNICODE(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnAPPEND(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);  
+            static int fnBUILD(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);  
+            static int fnGLOBAL(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnDICT(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnEMPTY_DICT(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnAPPENDS(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnGET(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);    
+            static int fnBINGET(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnINST(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack); 
+            static int fnLONG_BINGET(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnLIST(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);     
+            static int fnEMPTY_LIST(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnOBJ(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);     
+            static int fnPUT(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);    
+            static int fnBINPUT(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnLONG_BINPUT(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnSETITEM(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);  
+            static int fnTUPLE(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);   
+            static int fnEMPTY_TUPLE(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnSETITEMS(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack); 
+            static int fnBINFLOAT(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnPROTO(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);  
+            static int fnNEWOBJ(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnEXT1(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack); 
+            static int fnEXT2(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnEXT4(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnTUPLE1(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnTUPLE2(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnTUPLE3(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnTRUE(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnFALSE(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnLONG1(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
+            static int fnLONG4(std::string str1,std::string::iterator &it1,void *classPtr,Stack *theStack);
 };
 
 class Pickle {
@@ -136,5 +135,3 @@ class Pickle {
         Pickle();
 	Opcode *opcodes[OPCODE_COUNT];
 };
-
-typedef stack<StackItem> items;

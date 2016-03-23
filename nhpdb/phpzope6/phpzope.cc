@@ -1,3 +1,4 @@
+#include "stackitem.h"
 #include "pickle.h"
 #include "phpzope.h"
 
@@ -20,7 +21,7 @@ int PHPZope::readPickle(char *src)
 	return 0;
 } 
 
-int PHPZope::retrieve_state(string state2,stack<StackItem> buildStack)
+int PHPZope::retrieve_state(string state2,Stack &buildStack)
         {
 	std::string filename = "state.txt";
 	StackItem *ptrStackItem;
@@ -40,9 +41,11 @@ int PHPZope::retrieve_state(string state2,stack<StackItem> buildStack)
 		if (currentOpcode->opcode == *it)
                 {
 		    int result;
-		    //ptrStackItem->opcode=currentOpcode->opcode;
+		    char *someString;
+		    sprintf(ptrStackItem->opcode,"opcode: %c",currentOpcode->opcode);
+		    //printf("%s\n",ptrStackItem->opcode);
 	    	    buildStack.push(*ptrStackItem);
-	            result = (currentOpcode->opfunc)(state2,it,currentOpcode,&buildStack);
+	            //result = (currentOpcode->opfunc)(state2,it,currentOpcode,&buildStack);
 		}
 	    }
 	    it++;
@@ -57,7 +60,8 @@ char* PHPZope::returnPickleFile()
 	std::string state;
 	std::string state2;
 	int j;
-	stack<StackItem> theStack;
+	Stack theStack;
+	
 	ifstream infile;
 	infile.open(this->filename);
 	while (!infile.eof())
@@ -67,12 +71,15 @@ char* PHPZope::returnPickleFile()
 	}
 	j = this->retrieve_state(state2,theStack);
 	infile.close();
-	StackItem item;
-	item = theStack.top();
-	char* charOpcode;
 	char* theString;
-	theString = (char*)malloc(100*sizeof(char));
-	sprintf(theString,"the Stack was deep %i, and opcode was: %c",j,item.opcode);
+	theString = (char*)malloc(1800*sizeof(char));
+	char* ptr;
+	ptr = theString;
+	int i;
+	int stackDepth = theStack.depth();
+	StackItem *items = theStack.pop();
+	StackItem item = *items;
+	sprintf(theString,"done: %i,%s",item.someInt,item.opcode);
 	return theString;
 }
 

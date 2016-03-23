@@ -2,12 +2,12 @@
 
     $zope = new PHPZope();
 
-    print $zope->returnValue();
+    //print $zope->returnValue();
 
     $zope->readPickle("newdoc.txt");
 
     print $zope->returnPickleFile();
 
-    print_r($zope);
+    //print_r($zope);
 
 ?>

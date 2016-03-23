@@ -6,9 +6,7 @@
 #include <string>
 #include <stdexcept>
 #include <fstream>
-#include <stack>
 #include <regex>
-
 
 #ifndef PHPZOPE_H
 #define PHPZOPE_H
@@ -43,7 +41,7 @@ public:
     int returnValue();
     int readPickle(char *strFile);
     char* returnPickleFile();
-    int retrieve_state(string state2,stack<StackItem> theStack);
+    int retrieve_state(string state2,Stack &theStack);
     char* returnModuleName();
     char* returnKlassName();
 private:
