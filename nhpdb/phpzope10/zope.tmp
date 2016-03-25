@@ -1,0 +1,13 @@
+<?php
+
+    $zope = new PHPZope();
+
+    //print $zope->returnValue();
+
+    $zope->readPickle("newdoc.txt");
+
+    print $zope->returnPickleFile();
+
+    //print_r($zope);
+
+?>
