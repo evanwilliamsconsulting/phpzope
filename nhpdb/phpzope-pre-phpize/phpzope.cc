@@ -1,33 +1,93 @@
-#include "php_phpzope.h"
+#include "stackitem.h"
+#include "pickle.h"
+#include "phpzope.h"
+
+
 //  Basic PHPZOPE Class
-class PHPZope {
-public:
-    PHPZope();
-    int returnValue();
-private:
-    char *filename;
-};
-
-
 PHPZope::PHPZope() {
+}
+
+PHPZope::~PHPZope() {
 }
 
 int PHPZope::returnValue() {
 	return 8;
 }
+int PHPZope::readPickle(char *src)
+{
+	// http://en.cppreference.com/w/cpp/string/byte/strcpy
+	//this->filename = new char(std::strlen(src)+10);
+    	strcpy(this->filename, src);
+	return 0;
+} 
 
+int PHPZope::retrieve_state(string state2,Stack &buildStack)
+        {
+	std::string filename = "state.txt";
+	StackItem *ptrStackItem;
 
-zend_object_handlers phpzope_object_handlers;
+	/* fetch the data : retrieve all the rows in the result set */
 
-struct phpzope_object {
-    zend_object std;
-    class PHPZope *phpzope;
-};
-zend_class_entry *phpzope_ce;
+	Pickle *myPickler = new Pickle();
+	std::string::iterator it;
+	int j = 0;
+	it = state2.begin();
+	do
+	{
+	    ptrStackItem = (StackItem*)malloc(sizeof(StackItem));
+	    for (int i = 0; i < OPCODE_COUNT; i++)
+	    {
+	        Opcode *currentOpcode = myPickler->opcodes[i];
+		if (currentOpcode->opcode == *it)
+                {
+		    int result;
+		    char *someString;
+		    sprintf(ptrStackItem->opcode,"%c",currentOpcode->opcode);
+		    //printf("%s\n",ptrStackItem->opcode);
+	    	    buildStack.push(*ptrStackItem);
+	            //result = (currentOpcode->opfunc)(state2,it,currentOpcode,&buildStack);
+		}
+	    }
+	    it++;
+	    j++;
+        } while ( it != state2.end() && *it > 0);
+
+	return j;
+} // retrieve_state()
+
+char* PHPZope::returnPickleFile()
+{
+	std::string state;
+	std::string state2;
+	int j;
+	Stack theStack;
+	
+	ifstream infile;
+	infile.open(this->filename);
+	while (!infile.eof())
+        {
+	    infile >> state;
+	    state2.append(state); 
+	}
+	j = this->retrieve_state(state2,theStack);
+	infile.close();
+	char* theString;
+	theString = (char*)malloc(1800*sizeof(char));
+	char* ptr;
+	ptr = theString;
+	int i;
+	int stackDepth = theStack.depth();
+	StackItem *items = theStack.pop();
+	StackItem item = *items;
+	i=sprintf(ptr,"%s",item.opcode);
+	ptr +=i;
+	return theString;
+}
+
 void phpzope_free_storage(void *object TSRMLS_DC)
 {
     phpzope_object *obj = (phpzope_object *)object;
-    delete &(obj->phpzope); 
+    //delete &(obj->phpzope); 
 
     zend_hash_destroy(obj->std.properties);
     FREE_HASHTABLE(obj->std.properties);
@@ -62,39 +122,76 @@ zend_object_value phpzope_create_handler(zend_class_entry *type TSRMLS_DC)
 PHP_METHOD(PHPZope, __construct)
 {
     const char *filename="test.txt";
-    PHPZope *phpzope = new PHPZope();
+    PHPZope *phpzope = NULL;
     zval *object = getThis();
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &filename) == FAILURE) {
-        RETURN_NULL();
-    }
-
+    phpzope = new PHPZope();
     phpzope_object *obj = (phpzope_object *)zend_object_store_get_object(object TSRMLS_CC);
     obj->phpzope = phpzope;
 
 }
 PHP_METHOD(PHPZope, returnValue)
 {
-PHPZope *phpzope;
+    PHPZope *phpzope;
     phpzope_object *obj = (phpzope_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
     phpzope = obj->phpzope;
     if (phpzope != NULL) {
-        RETURN_INT(phpzope->returnValue());
+        RETURN_LONG(phpzope->returnValue());
     }
     RETURN_NULL();
 }
+PHP_METHOD(PHPZope, readPickle)
+{
+    PHPZope *phpzope;
+    char *ptr,*ptr2;
+    char name[100];
+    int name_len;
+    phpzope_object *obj = (phpzope_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+    phpzope = obj->phpzope;
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &ptr, &name_len) == FAILURE) {
+        RETURN_NULL();
+    }
+    ptr2 = name;
+    for (int i=0;i<name_len;i++)
+    {
+	//php_printf("%c",*ptr);
+	*ptr2++ = *ptr++;
+    }
+    *ptr2 = '\0';
+    ptr2 = name;
+    //php_printf("ZEND_NUM_ARGS: %i\n",ZEND_NUM_ARGS());
+    //php_printf("%s %i\n",name,name_len);
+    if (phpzope != NULL) {
+        phpzope->readPickle(ptr2);
+    }
+    RETURN_NULL();
+}
+PHP_METHOD(PHPZope, returnPickleFile)
+{
+    PHPZope *phpzope;
+    phpzope_object *obj = (phpzope_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+    phpzope = obj->phpzope;
+    if (phpzope != NULL) {
+        RETURN_STRING(phpzope->returnPickleFile(),1);
+    }
+    RETURN_NULL();
+} 
 
 zend_function_entry phpzope_methods[] = {
         PHP_ME(PHPZope,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
         PHP_ME(PHPZope,  returnValue,           NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(PHPZope,  readPickle,           NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(PHPZope,  returnPickleFile,           NULL, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
 };
 
-PHP_MINIT_FUNCTION(phpzope_object)
+PHP_MINIT_FUNCTION(phpzope)
 {
     zend_class_entry ce;
-    INIT_CLASS_ENTRY(ce, "PHPZope", phpzope_object);
+    INIT_CLASS_ENTRY(ce, "PHPZope", phpzope_methods);
     phpzope_ce = zend_register_internal_class(&ce TSRMLS_CC);
     phpzope_ce->create_object = phpzope_create_handler;
     memcpy(&phpzope_object_handlers,
@@ -103,7 +200,7 @@ PHP_MINIT_FUNCTION(phpzope_object)
     return SUCCESS;
 }
 
-zend_module_entry vehicles_module_entry = {
+zend_module_entry phpzope_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
     STANDARD_MODULE_HEADER,
 #endif
@@ -120,7 +217,7 @@ zend_module_entry vehicles_module_entry = {
     STANDARD_MODULE_PROPERTIES
 };
 
-#ifdef COMPILE_DL_VEHICLES
+#ifdef COMPILE_DL_PHPZOPE
 extern "C" {
 ZEND_GET_MODULE(phpzope)
 }

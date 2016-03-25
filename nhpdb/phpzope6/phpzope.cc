@@ -42,7 +42,7 @@ int PHPZope::retrieve_state(string state2,Stack &buildStack)
                 {
 		    int result;
 		    char *someString;
-		    sprintf(ptrStackItem->opcode,"opcode: %c",currentOpcode->opcode);
+		    sprintf(ptrStackItem->opcode,"%c",currentOpcode->opcode);
 		    //printf("%s\n",ptrStackItem->opcode);
 	    	    buildStack.push(*ptrStackItem);
 	            //result = (currentOpcode->opfunc)(state2,it,currentOpcode,&buildStack);
@@ -79,7 +79,8 @@ char* PHPZope::returnPickleFile()
 	int stackDepth = theStack.depth();
 	StackItem *items = theStack.pop();
 	StackItem item = *items;
-	sprintf(theString,"done: %i,%s",item.someInt,item.opcode);
+	i=sprintf(ptr,"%s",item.opcode);
+	ptr +=i;
 	return theString;
 }
 
