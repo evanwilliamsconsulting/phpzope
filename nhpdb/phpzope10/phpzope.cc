@@ -45,7 +45,7 @@ int PHPZope::retrieve_state(string state2,Stack &buildStack)
 		    sprintf(ptrStackItem->opcode,"%c",currentOpcode->opcode);
 		    //printf("%s\n",ptrStackItem->opcode);
 	    	    buildStack.push(*ptrStackItem);
-	            //result = (currentOpcode->opfunc)(state2,it,currentOpcode,&buildStack);
+	            result = (currentOpcode->opfunc)(state2,it,currentOpcode,&buildStack);
 		}
 	    }
 	    it++;
@@ -58,30 +58,41 @@ int PHPZope::retrieve_state(string state2,Stack &buildStack)
 char* PHPZope::returnPickleFile()
 {
 	std::string state;
-	std::string state2;
 	int j;
 	Stack theStack;
-	
+
 	ifstream infile;
+
+        //__asm__("int3");
 	infile.open(this->filename);
-	while (!infile.eof())
+        if ( infile.fail() )
         {
-	    infile >> state;
-	    state2.append(state); 
+	   strcpy(this->filename,strerror(errno));
 	}
-	j = this->retrieve_state(state2,theStack);
-	infile.close();
-	char* theString;
-	theString = (char*)malloc(1800*sizeof(char));
-	char* ptr;
-	ptr = theString;
-	int i;
-	int stackDepth = theStack.depth();
-	StackItem *items = theStack.pop();
-	StackItem item = *items;
-	i=sprintf(ptr,"%s",item.opcode);
-	ptr +=i;
-	return theString;
+	else
+	{
+	    while (!infile.eof())
+            {
+		getline(infile,state);
+	        j = this->retrieve_state(state,theStack);
+	    }
+	    infile.close();
+	    char* theString;
+	    theString = (char*)malloc(1800*sizeof(char));
+	    char* ptr;
+	    ptr = theString;
+	    int i;
+	    int stackDepth = theStack.depth();
+	    while (!theStack.isempty())
+            {
+	        StackItem *items = theStack.pop();
+	        StackItem item = *items;
+	        i=sprintf(ptr,"%s",item.opcode);
+	        ptr +=i;
+            }
+	    strcpy(this->filename,theString);
+        }
+	return this->filename;
 }
 
 void phpzope_free_storage(void *object TSRMLS_DC)

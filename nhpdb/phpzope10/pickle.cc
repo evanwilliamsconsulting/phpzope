@@ -518,7 +518,7 @@ int Opcode::fnPUT(std::string str1,std::string::iterator &it1,void *classPtr,Sta
              {
 		if (countNewline == 0)
 		{
-			strPut.append(sizeof(char),*it1);
+			//strPut.append(sizeof(char),*it1);
 		}
              }
 	     it1++;

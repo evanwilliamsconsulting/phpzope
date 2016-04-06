@@ -32,7 +32,7 @@ CPPFLAGS = -DHAVE_CONFIG_H
 CXX = g++
 CXXFLAGS = -g -O2 -std=c++11
 CXXFLAGS_CLEAN = $(CXXFLAGS)
-EXTENSION_DIR = /usr/lib/php/extensions/no-debug-zts-20131226
+EXTENSION_DIR = /usr/local/lib/php/extensions/no-debug-zts-20131226
 PHP_EXECUTABLE = /usr/bin/php
 EXTRA_LDFLAGS =
 EXTRA_LIBS =
