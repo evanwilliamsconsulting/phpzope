@@ -45,7 +45,8 @@ public:
     char* returnModuleName();
     char* returnKlassName();
 private:
-    char* filename;
+    char filename[100];
+    char buffer[1000];
 };
 
 zend_object_handlers phpzope_object_handlers;

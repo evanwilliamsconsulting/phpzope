@@ -17,6 +17,7 @@ int PHPZope::readPickle(char *src)
 {
 	// http://en.cppreference.com/w/cpp/string/byte/strcpy
 	//this->filename = new char(std::strlen(src)+10);
+	this->filename = (char*)malloc(100*sizeof(char));
     	strcpy(this->filename, src);
 	return 0;
 } 

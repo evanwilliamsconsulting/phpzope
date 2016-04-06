@@ -1,4 +1,0 @@
-1.  Open New PHPZope
-2.  Read Pickle and Provide Pickle
-3.  Load Pickle
-4.  Access Result.
