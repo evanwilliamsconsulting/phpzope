@@ -1,0 +1,14 @@
+	int forward;
+	forward = 0;
+	printf("Process MARK\n");
+	std::string strMARK;
+	it1++;
+	forward++;
+	/*
+	putItem= theStack->pop();
+	putItem->allocateSpaceOnStack();
+	theStack->push(*putItem);
+	*/
+	printf("MARK\n");
+	
+	return forward;
