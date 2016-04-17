@@ -6,8 +6,9 @@
 
     $zope->readPickle("newdoc.txt");
 
-    print $zope->returnPickleFile();
+    var_dump($zope->returnPickleFile());
 
-    //print_r($zope);
+
+    print_r($zope);
 
 ?>

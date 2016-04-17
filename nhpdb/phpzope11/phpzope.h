@@ -43,6 +43,9 @@ public:
     int retrieve_state(ifstream &instream,string state2,Stack &theStack);
     char* returnModuleName();
     char* returnKlassName();
+    Stack currentStack;
+    int retrieveStackDepth();
+    Stack& retrieveCurrentStack();
 private:
     char filename[100];
     char buffer[1000];

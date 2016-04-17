@@ -13,6 +13,15 @@ PHPZope::~PHPZope() {
 int PHPZope::returnValue() {
 	return 8;
 }
+Stack &PHPZope::retrieveCurrentStack()
+{
+	return this->currentStack;
+}
+int PHPZope::retrieveStackDepth() {
+	Stack theStack = this->currentStack;
+	int stackDepth = theStack.depth();
+	return stackDepth;
+}
 int PHPZope::readPickle(char *src)
 {
 	// http://en.cppreference.com/w/cpp/string/byte/strcpy
@@ -25,6 +34,7 @@ int PHPZope::retrieve_state(ifstream &instream,string state2,Stack &buildStack)
         {
 	std::string filename = "state.txt";
 	StackItem *ptrStackItem;
+	int result;
 
 	/* fetch the data : retrieve all the rows in the result set */
 
@@ -33,22 +43,26 @@ int PHPZope::retrieve_state(ifstream &instream,string state2,Stack &buildStack)
 	it = state2.begin();
 	do
 	{
+	    if (*it == '|')
+	    {
+		return -1;
+	    }
 	    ptrStackItem = (StackItem*)malloc(sizeof(StackItem));
 	    for (int i = 0; i < OPCODE_COUNT; i++)
 	    {
 	    	Opcode *currentOpcode = myPickler->opcodes[i];
 	        if (currentOpcode->opcode == *it)
                 {
-		    int result;
 		    char *someString;
 		    sprintf(ptrStackItem->opcode,"%c",currentOpcode->opcode);
 		    //sprintf(ptrStackItem->desc,"%s",currentOpcode->desc);
-		    printf("OPCODE: %s %s\n",ptrStackItem->opcode,currentOpcode->desc);
+		    //printf("OPCODE: %s %s\n",ptrStackItem->opcode,currentOpcode->desc);
 	    	    buildStack.push(*ptrStackItem);
-	            result = (currentOpcode->opfunc)(instream,state2,it,currentOpcode,&buildStack);
+	            result = (currentOpcode->opfunc)(instream,state2,it,currentOpcode,buildStack);
+		    this->currentStack = buildStack;
 		}
 	    }
-    	} while ( it != state2.end() && *it > 0);
+    	} while ( it != state2.end() && *it > 0 && result != 0);
 
     	return 0;
 } // retrieve_state()
@@ -58,21 +72,26 @@ char* PHPZope::returnPickleFile()
 	std::string state;
 	int j;
 	Stack theStack;
+	int boolSTOP;
 
 	ifstream infile;
 
         //__asm__("int3");
 	infile.open(this->filename);
+	boolSTOP = -1;
         if ( infile.fail() )
         {
 	   strcpy(this->filename,strerror(errno));
 	}
 	else
 	{
-	    while (!infile.eof())
+	    while (!infile.eof() )
             {
 		getline(infile,state);
-	        this->retrieve_state(infile,state,theStack);
+	        if ( -1 == this->retrieve_state(infile,state,theStack))
+		{
+		   boolSTOP =  0;
+		}
 	    }
 	    infile.close();
 	    char* theString;
@@ -81,14 +100,15 @@ char* PHPZope::returnPickleFile()
 	    ptr = theString;
 	    int i;
 	    int stackDepth = theStack.depth();
-	    //while (!theStack.isempty())
-            //{
-	    //    StackItem *items = theStack.pop();
-	    //    StackItem item = *items;
-	    //    i=sprintf(ptr,"%s",item.opcode);
-	    //    ptr +=i;
-            // }
-	    //strcpy(this->filename,theString);
+	    /*while (!theStack.isempty())
+            {
+	        StackItem *items = theStack.pop();
+	        StackItem item = *items;
+	        i=sprintf(ptr,"%s",item.opcode);
+	        ptr +=i;
+             }
+	    strcpy(this->filename,theString);
+	    */
         }
 	return this->filename;
 }
@@ -178,14 +198,40 @@ PHP_METHOD(PHPZope, readPickle)
 }
 PHP_METHOD(PHPZope, returnPickleFile)
 {
+    char *mystr;
+    zval *mysubarray;
+    Stack theStack;
+
+    array_init(return_value);
+    add_index_long(return_value, 42, 123);
+    add_next_index_string(return_value,"I should now be found at index 43", 1);
+    add_next_index_string(return_value,"I'm at 44!", 1);
+    mystr = estrdup("Forty Five");
+    add_next_index_string(return_value,"pi",3.1415926535);
     PHPZope *phpzope;
     phpzope_object *obj = (phpzope_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
     phpzope = obj->phpzope;
     if (phpzope != NULL) {
-        RETURN_STRING(phpzope->returnPickleFile(),1);
+	phpzope->returnPickleFile();
+	ALLOC_INIT_ZVAL(mysubarray);
+	array_init(mysubarray);
+	char somestring[100];
+	sprintf(somestring,"stackDepth %i",phpzope->retrieveStackDepth());
+	add_next_index_string(mysubarray,somestring,1);
+	int stackDepth = phpzope->retrieveStackDepth();
+	Stack theStack = phpzope->retrieveCurrentStack();
+	while (stackDepth > 0 )
+	{
+	     StackItem* stackItem = theStack.pop();
+	     sprintf(somestring,"opcode %s",stackItem->opcode);
+	     stackDepth--;
+	     //sprintf(somestring,"stackDepth %i",phpzope->retrieveStackDepth());
+	     add_next_index_string(mysubarray,somestring,1);
+	}
+	add_assoc_zval(return_value,"subarray",mysubarray);
     }
-    RETURN_NULL();
+    //RETURN_NULL();
 } 
 
 zend_function_entry phpzope_methods[] = {

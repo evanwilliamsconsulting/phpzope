@@ -13,7 +13,6 @@ using namespace std;
 class StackItem {
     public:
         char opcode[30];
-	char desc[50];
         int someInt;
 	char someString[100];
         StackItem()

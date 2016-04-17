@@ -10,6 +10,7 @@ StackItem& StackItem::operator=(const StackItem& otherItem)
 // Function to add item x to stack
 void Stack::push(StackItem x)
 {
+    printf("push onto stack\n");
     StackItem currentItem;
     if(!isfull()){
 	this->items[this->top] = x;
