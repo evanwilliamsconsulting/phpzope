@@ -40,6 +40,7 @@ int PHPZope::retrieve_state(ifstream &instream,string state2,Stack &buildStack)
 	Pickle *myPickler = new Pickle();
 	std::string::iterator it;
 	it = state2.begin();
+	int num = 0;
 	do
 	{
 	    if (*it == '|')
@@ -55,6 +56,7 @@ int PHPZope::retrieve_state(ifstream &instream,string state2,Stack &buildStack)
 		    char *someString;
 		    ptrStackItem->opcode = currentOpcode->opcode;
 	    	    buildStack.push(*ptrStackItem);
+		    //:jkhhprintf("current: %c, %i",currentOpcode->opcode,num++);
 	            result = (currentOpcode->opfunc)(instream,state2,it,currentOpcode,buildStack);
 		    this->currentStack = buildStack;
 		}

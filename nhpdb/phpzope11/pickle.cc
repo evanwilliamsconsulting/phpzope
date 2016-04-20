@@ -248,27 +248,29 @@ int Opcode::fnREDUCE(ifstream &instream,std::string str1,std::string::iterator &
 // push string; NL-terminated string argument
 int Opcode::fnSTRING(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack)
 {
+	StackItem *stringItem;
 	std::string strString;
 	int countApostrophe = 0;
 	int forward = 1;
-	while (it1 != str1.end() && countApostrophe < 2)
+	char *ptr;
+	char *buf;
+	int len;
+	buf = (char*)malloc(sizeof(char)*200);
+	ptr = buf;
+	len = 0;
+	while (it1 != str1.end() && *it1 != '\177')
         {
-	     int item;
-	     item = *it1;
-	     if (*it1 == '\'')
-             {
-		countApostrophe++;
-	     }
-             else
-             {
-	         strString.append(sizeof(char),*it1);
-             }
+	     *ptr++ = *it1;
+	     len++;
 	     it1++;
 	     forward++;
 	}
-        //cout << "STRING: string:";
-	//cout << strString;
-	//cout << endl;
+	it1--;
+	stringItem = theStack.pop();
+	stringItem->someString=(char*)malloc(sizeof(char)*(len+1));
+	strcpy(stringItem->someString,buf);
+	free(buf);
+	theStack.push(*stringItem);
 	return forward;
 }
 // push string; counted binary string argument
@@ -749,6 +751,7 @@ int Opcode::oprDUP(zval* subarray,StackItem* stackitem, int depth) {
 int Opcode::oprFLOAT(zval* subarray,StackItem* stackitem, int depth) {
 }
 int Opcode::oprINT(zval* subarray,StackItem* stackitem, int depth) {
+	add_next_index_long(subarray,stackitem->someInt);
 }
 int Opcode::oprBININT(zval* subarray,StackItem* stackitem, int depth) {
 }
@@ -767,6 +770,10 @@ int Opcode::oprBINPERSID(zval* subarray,StackItem* stackitem, int depth) {
 int Opcode::oprREDUCE(zval* subarray,StackItem* stackitem, int depth) {
 }
 int Opcode::oprSTRING(zval* subarray,StackItem* stackitem, int depth) {
+	char somestring[100];
+	printf("opr: module: %s",stackitem->someString);
+	sprintf(somestring,"module: %s",stackitem->someString);
+	add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprBINSTRING(zval* subarray,StackItem* stackitem, int depth) {
 }
