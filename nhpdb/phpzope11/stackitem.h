@@ -12,16 +12,17 @@ using namespace std;
 
 class StackItem {
     public:
-        char opcode[30];
+        char opcode;
         int someInt;
-	char someString[100];
+	char* someString;
         StackItem()
 	{
 	}
         StackItem(const StackItem &otherItem)
 	{
-	    strcpy(opcode,otherItem.opcode);
+	    opcode = otherItem.opcode;
 	    someInt = otherItem.someInt;
+	    someString = otherItem.someString;
 	}
 	StackItem& operator= (const StackItem &otherItem);
 };

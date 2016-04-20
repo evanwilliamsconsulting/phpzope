@@ -1,4 +1,6 @@
 #include "basics.h"
+#include "php.h"
+#include "stackitem.h"
 
 using namespace std;
 
@@ -55,14 +57,17 @@ enum pycodes {
   FALSE,
   LONG1,
   LONG4,
+  GLOBAL1,
+  GLOBAL2,
   OPCODE_COUNT
 };
 
-typedef int (*fn)(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack);
 
 using namespace std;
 
 	class Opcode {
+		typedef int (*fn)(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack);
+		typedef int (*op_print)(zval *subarray,StackItem *stackItem,int depth);
 		protected:
 		    std::string module;
 		    std::string name;
@@ -71,11 +76,15 @@ using namespace std;
 		    char opcode;
 		    char desc[25];
 		    fn opfunc;
-		    Opcode(char opcodeChar,const char *desc,fn funct);
+		    op_print opr;
+		    Opcode(char opcodeChar,const char *desc,fn funct,op_print oppr);
 		    char *getDescription();
 		    void setModule(std::string inModule);
 		    void setName(std::string inName); 
 		    void setPid(std::string inPid);
+		    // Dummy Opcodes
+		    static int fnGLOBAL1(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack);
+		    static int fnGLOBAL2(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack);
 		    static int fnSTOP(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack);
 	    static int fnMARK(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack);
             static int fnPOP(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack);
@@ -129,6 +138,63 @@ using namespace std;
             static int fnFALSE(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack);
             static int fnLONG1(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack);
             static int fnLONG4(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack);
+	    // print functions for the dummy opcodes
+	    static int oprGLOBAL1(zval* subarray,StackItem* stackitem,int depth);
+	    static int oprGLOBAL2(zval* subarray,StackItem* stackitem,int depth);
+	    // end dummy
+	    static int oprSTOP(zval* subarray,StackItem* stackitem,int depth);
+	    static int oprMARK(zval* subarray,StackItem* stackitem,int depth);
+            static int oprPOP(zval* subarray,StackItem* stackitem,int depth);
+            static int oprPOP_MARK(zval* subarray,StackItem* stackitem,int depth);
+            static int oprDUP(zval* subarray,StackItem* stackitem,int depth);
+            static int oprFLOAT(zval* subarray,StackItem* stackitem,int depth);
+            static int oprINT(zval* subarray,StackItem* stackitem,int depth);
+            static int oprBININT(zval* subarray,StackItem* stackitem,int depth);
+            static int oprBININT1(zval* subarray,StackItem* stackitem,int depth);
+            static int oprLONG(zval* subarray,StackItem* stackitem,int depth);
+            static int oprBININT2(zval* subarray,StackItem* stackitem,int depth);
+            static int oprNONE(zval* subarray,StackItem* stackitem,int depth);
+            static int oprPERSID(zval* subarray,StackItem* stackitem,int depth);
+            static int oprBINPERSID(zval* subarray,StackItem* stackitem,int depth);
+            static int oprREDUCE(zval* subarray,StackItem* stackitem,int depth);
+            static int oprSTRING(zval* subarray,StackItem* stackitem,int depth);
+            static int oprBINSTRING(zval* subarray,StackItem* stackitem,int depth);
+            static int oprSHORT_BINSTRING(zval* subarray,StackItem* stackitem,int depth);
+            static int oprUNICODE(zval* subarray,StackItem* stackitem,int depth);
+            static int oprBINUNICODE(zval* subarray,StackItem* stackitem,int depth);
+            static int oprAPPEND(zval* subarray,StackItem* stackitem,int depth);  
+            static int oprBUILD(zval* subarray,StackItem* stackitem,int depth);  
+            static int oprGLOBAL(zval* subarray,StackItem* stackitem,int depth);
+            static int oprDICT(zval* subarray,StackItem* stackitem,int depth);
+            static int oprEMPTY_DICT(zval* subarray,StackItem* stackitem,int depth);
+            static int oprAPPENDS(zval* subarray,StackItem* stackitem,int depth);
+            static int oprGET(zval* subarray,StackItem* stackitem,int depth);    
+            static int oprBINGET(zval* subarray,StackItem* stackitem,int depth);
+            static int oprINST(zval* subarray,StackItem* stackitem,int depth); 
+            static int oprLONG_BINGET(zval* subarray,StackItem* stackitem,int depth);
+            static int oprLIST(zval* subarray,StackItem* stackitem,int depth);     
+            static int oprEMPTY_LIST(zval* subarray,StackItem* stackitem,int depth);
+            static int oprOBJ(zval* subarray,StackItem* stackitem,int depth);     
+            static int oprPUT(zval* subarray,StackItem* stackitem,int depth);    
+            static int oprBINPUT(zval* subarray,StackItem* stackitem,int depth);
+            static int oprLONG_BINPUT(zval* subarray,StackItem* stackitem,int depth);
+            static int oprSETITEM(zval* subarray,StackItem* stackitem,int depth);  
+            static int oprTUPLE(zval* subarray,StackItem* stackitem,int depth);   
+            static int oprEMPTY_TUPLE(zval* subarray,StackItem* stackitem,int depth);
+            static int oprSETITEMS(zval* subarray,StackItem* stackitem,int depth); 
+            static int oprBINFLOAT(zval* subarray,StackItem* stackitem,int depth);
+            static int oprPROTO(zval* subarray,StackItem* stackitem,int depth);  
+            static int oprNEWOBJ(zval* subarray,StackItem* stackitem,int depth);
+            static int oprEXT1(zval* subarray,StackItem* stackitem,int depth); 
+            static int oprEXT2(zval* subarray,StackItem* stackitem,int depth);
+            static int oprEXT4(zval* subarray,StackItem* stackitem,int depth);
+            static int oprTUPLE1(zval* subarray,StackItem* stackitem,int depth);
+            static int oprTUPLE2(zval* subarray,StackItem* stackitem,int depth);
+            static int oprTUPLE3(zval* subarray,StackItem* stackitem,int depth);
+            static int oprTRUE(zval* subarray,StackItem* stackitem,int depth);
+            static int oprFALSE(zval* subarray,StackItem* stackitem,int depth);
+            static int oprLONG1(zval* subarray,StackItem* stackitem,int depth);
+            static int oprLONG4(zval* subarray,StackItem* stackitem,int depth);
 };
 
 class Pickle {

@@ -1,13 +1,12 @@
-#include "stackitem.h"
 #include "pickle.h"
 
 
-Opcode::Opcode(char opcodeChar,const char *desc,fn funct)
+Opcode::Opcode(char opcodeChar,const char *desc,fn funct,op_print opr)
 {
     this->opcode = opcodeChar;
     this->opfunc = funct;
+    this->opr = opr;
     strcpy(this->desc,(const char *)desc);
-    printf("%s\n",this->desc);
 }
 void Opcode::setModule(std::string inModule)
 {
@@ -27,66 +26,73 @@ char* Opcode::getDescription()
 }
 Pickle::Pickle()
 {
-    opcodes[STOP] = new Opcode('.',"STOP",Opcode::fnSTOP);
-    opcodes[MARK] = new Opcode('(',"MARK",Opcode::fnMARK);
-    opcodes[POP] = new Opcode('0',"POP",Opcode::fnPOP);
-    opcodes[POP_MARK] = new Opcode('1',"POP_MARK",Opcode::fnPOP_MARK);
-    opcodes[DUP] = new Opcode('2',"DUP",Opcode::fnDUP);
-    opcodes[FLOAT] = new Opcode('F',"FLOAT",Opcode::fnFLOAT);
-    opcodes[INT] = new Opcode('I',"INT",Opcode::fnINT);
-    opcodes[BININT] = new Opcode('J',"BININT",Opcode::fnBININT);
-    opcodes[BININT2] = new Opcode('M',"BININT2",Opcode::fnBININT2);
-    opcodes[LLONG] = new Opcode('L',"LLONG",Opcode::fnLONG);
-    opcodes[NONE] = new Opcode('N',"NONE",Opcode::fnNONE);
-    opcodes[PERSID] = new Opcode('P',"PERSID",Opcode::fnPERSID);
-    opcodes[BINPERSID] = new Opcode('Q',"BINPERSID",Opcode::fnBINPERSID);
-    opcodes[REDUCE] = new Opcode('R',"REDUCE",Opcode::fnREDUCE);
-    opcodes[STRING] = new Opcode('S',"STRING",Opcode::fnSTRING);
-    opcodes[BINSTRING] = new Opcode('T',"BINSTRING",Opcode::fnBINSTRING);
-    opcodes[SHORT_BINSTRING] = new Opcode('U',"SHORT_BINSTRING",Opcode::fnSHORT_BINSTRING);
-    opcodes[UNICODE] = new Opcode('V',"UNICODE",Opcode::fnUNICODE);
-    opcodes[BINUNICODE] = new Opcode('X',"BINUNICODE",Opcode::fnBINUNICODE);
-    opcodes[APPEND] = new Opcode('a',"APPEND",Opcode::fnAPPEND);  
-    opcodes[BUILD] = new Opcode('b',"BUILD",Opcode::fnBUILD);  
-    opcodes[GLOBAL] = new Opcode('c',"GLOBAL",Opcode::fnGLOBAL);
-    opcodes[DICT] = new Opcode('d',"DICT",Opcode::fnDICT);
-    opcodes[EMPTY_DICT] = new Opcode('}',"EMPTY_DICT",Opcode::fnEMPTY_DICT);
-    opcodes[APPENDS] = new Opcode('e',"APPENDS",Opcode::fnAPPENDS);
-    opcodes[GET] = new Opcode('g',"GET",Opcode::fnGET);    
-    opcodes[BINGET] = new Opcode('h',"BINGET",Opcode::fnBINGET);
-    opcodes[INST] = new Opcode('i',"INST",Opcode::fnINST); 
-    opcodes[LONG_BINGET] = new Opcode('j',"LONG_BINGET",Opcode::fnLONG_BINGET);
-    opcodes[LIST] = new Opcode('l',"LIST",Opcode::fnLIST);     
-    opcodes[EMPTY_LIST] = new Opcode(']',"EMPTY_LIST",Opcode::fnEMPTY_LIST);
-    opcodes[OBJ] = new Opcode('o',"OBJ",Opcode::fnOBJ);     
-    opcodes[PUT] = new Opcode('p',"PUT",Opcode::fnPUT);    
-    opcodes[BINPUT] = new Opcode('q',"BINPUT",Opcode::fnBINPUT);
-    opcodes[LONG_BINPUT] = new Opcode('r',"LONG_BINPUT",Opcode::fnLONG_BINPUT);
-    opcodes[SETITEM] = new Opcode('s',"SETITEM",Opcode::fnSETITEM);  
-    opcodes[TUPLE] = new Opcode('t',"TUPLE",Opcode::fnTUPLE);   
-    opcodes[EMPTY_TUPLE] = new Opcode(')',"EMPTY_TUPLE",Opcode::fnEMPTY_TUPLE);
-    opcodes[SETITEMS] = new Opcode('u',"SETITEMS",Opcode::fnSETITEMS); 
-    opcodes[BINFLOAT] = new Opcode('G',"BINFLOAT",Opcode::fnBINFLOAT);
-    opcodes[PROTO] = new Opcode('\x80',"PROTO",Opcode::fnPROTO);  
-    opcodes[NEWOBJ] = new Opcode('\x81',"NEWOBJ",Opcode::fnNEWOBJ);
-    opcodes[EXT1] = new Opcode('\x82',"EXT1",Opcode::fnEXT1);
-    opcodes[EXT2] = new Opcode('\x83',"EXT2",Opcode::fnEXT2);
-    opcodes[EXT4] = new Opcode('\x84',"EXT4",Opcode::fnEXT4);
-    opcodes[TUPLE1] = new Opcode('\x85',"TUPLE1",Opcode::fnTUPLE1);
-    opcodes[TUPLE2] = new Opcode('\x86',"TUPLE2",Opcode::fnTUPLE2);
-    opcodes[TUPLE3] = new Opcode('\x87',"TUPLE3",Opcode::fnTUPLE3);
-    opcodes[TRUE] = new Opcode('\x88',"TRUE",Opcode::fnTRUE);
-    opcodes[FALSE] = new Opcode('\x89',"FALSE",Opcode::fnFALSE);
-    opcodes[LONG1] = new Opcode('\x8a',"LONG1",Opcode::fnLONG1);
-    opcodes[LONG4] = new Opcode('\x8b',"LONG4",Opcode::fnLONG4);
+    opcodes[GLOBAL1] = new Opcode('~',"GLOBAL1",Opcode::fnGLOBAL1,Opcode::oprGLOBAL1);
+    opcodes[GLOBAL2] = new Opcode('!',"GLOBAL2",Opcode::fnGLOBAL2,Opcode::oprGLOBAL2);
+    opcodes[STOP] = new Opcode('.',"STOP",Opcode::fnSTOP,Opcode::oprSTOP);
+    opcodes[MARK] = new Opcode('(',"MARK",Opcode::fnMARK,Opcode::oprMARK);
+    opcodes[POP] = new Opcode('0',"POP",Opcode::fnPOP,Opcode::oprPOP);
+    opcodes[POP_MARK] = new Opcode('1',"POP_MARK",Opcode::fnPOP_MARK,Opcode::oprPOP_MARK);
+    opcodes[DUP] = new Opcode('2',"DUP",Opcode::fnDUP,Opcode::oprDUP);
+    opcodes[FLOAT] = new Opcode('F',"FLOAT",Opcode::fnFLOAT,Opcode::oprFLOAT);
+    opcodes[INT] = new Opcode('I',"INT",Opcode::fnINT,Opcode::oprINT);
+    opcodes[BININT] = new Opcode('J',"BININT",Opcode::fnBININT,Opcode::oprBININT);
+    opcodes[BININT2] = new Opcode('M',"BININT2",Opcode::fnBININT2,Opcode::oprBININT2);
+    opcodes[LLONG] = new Opcode('L',"LLONG",Opcode::fnLONG,Opcode::oprLONG);
+    opcodes[NONE] = new Opcode('N',"NONE",Opcode::fnNONE,Opcode::oprNONE);
+    opcodes[PERSID] = new Opcode('P',"PERSID",Opcode::fnPERSID,Opcode::oprPERSID);
+    opcodes[BINPERSID] = new Opcode('Q',"BINPERSID",Opcode::fnBINPERSID,Opcode::oprBINPERSID);
+    opcodes[REDUCE] = new Opcode('R',"REDUCE",Opcode::fnREDUCE,Opcode::oprREDUCE);
+    opcodes[STRING] = new Opcode('S',"STRING",Opcode::fnSTRING,Opcode::oprSTRING);
+    opcodes[BINSTRING] = new Opcode('T',"BINSTRING",Opcode::fnBINSTRING,Opcode::oprBINSTRING);
+    opcodes[SHORT_BINSTRING] = new Opcode('U',"SHORT_BINSTRING",Opcode::fnSHORT_BINSTRING,Opcode::oprSHORT_BINSTRING);
+    opcodes[UNICODE] = new Opcode('V',"UNICODE",Opcode::fnUNICODE,Opcode::oprUNICODE);
+    opcodes[BINUNICODE] = new Opcode('X',"BINUNICODE",Opcode::fnBINUNICODE,Opcode::oprBINUNICODE);
+    opcodes[APPEND] = new Opcode('a',"APPEND",Opcode::fnAPPEND,Opcode::oprAPPEND);  
+    opcodes[BUILD] = new Opcode('b',"BUILD",Opcode::fnBUILD,Opcode::oprBUILD);  
+    opcodes[GLOBAL] = new Opcode('c',"GLOBAL",Opcode::fnGLOBAL,Opcode::oprGLOBAL);
+    opcodes[DICT] = new Opcode('d',"DICT",Opcode::fnDICT,Opcode::oprDICT);
+    opcodes[EMPTY_DICT] = new Opcode('}',"EMPTY_DICT",Opcode::fnEMPTY_DICT,Opcode::oprEMPTY_DICT);
+    opcodes[APPENDS] = new Opcode('e',"APPENDS",Opcode::fnAPPENDS,Opcode::oprAPPENDS);
+    opcodes[GET] = new Opcode('g',"GET",Opcode::fnGET,Opcode::oprGET);    
+    opcodes[BINGET] = new Opcode('h',"BINGET",Opcode::fnBINGET,Opcode::oprBINGET);
+    opcodes[INST] = new Opcode('i',"INST",Opcode::fnINST,Opcode::oprINST); 
+    opcodes[LONG_BINGET] = new Opcode('j',"LONG_BINGET",Opcode::fnLONG_BINGET,Opcode::oprLONG_BINGET);
+    opcodes[LIST] = new Opcode('l',"LIST",Opcode::fnLIST,Opcode::oprLIST);     
+    opcodes[EMPTY_LIST] = new Opcode(']',"EMPTY_LIST",Opcode::fnEMPTY_LIST,Opcode::oprEMPTY_LIST);
+    opcodes[OBJ] = new Opcode('o',"OBJ",Opcode::fnOBJ,Opcode::oprOBJ);     
+    opcodes[PUT] = new Opcode('p',"PUT",Opcode::fnPUT,Opcode::oprPUT);    
+    opcodes[BINPUT] = new Opcode('q',"BINPUT",Opcode::fnBINPUT,Opcode::oprBINPUT);
+    opcodes[LONG_BINPUT] = new Opcode('r',"LONG_BINPUT",Opcode::fnLONG_BINPUT,Opcode::oprLONG_BINPUT);
+    opcodes[SETITEM] = new Opcode('s',"SETITEM",Opcode::fnSETITEM,Opcode::oprSETITEM);  
+    opcodes[TUPLE] = new Opcode('t',"TUPLE",Opcode::fnTUPLE,Opcode::oprTUPLE);   
+    opcodes[EMPTY_TUPLE] = new Opcode(')',"EMPTY_TUPLE",Opcode::fnEMPTY_TUPLE,Opcode::oprEMPTY_TUPLE);
+    opcodes[SETITEMS] = new Opcode('u',"SETITEMS",Opcode::fnSETITEMS,Opcode::oprSETITEMS); 
+    opcodes[BINFLOAT] = new Opcode('G',"BINFLOAT",Opcode::fnBINFLOAT,Opcode::oprBINFLOAT);
+    opcodes[PROTO] = new Opcode('\x80',"PROTO",Opcode::fnPROTO,Opcode::oprPROTO);  
+    opcodes[NEWOBJ] = new Opcode('\x81',"NEWOBJ",Opcode::fnNEWOBJ,Opcode::oprNEWOBJ);
+    opcodes[EXT1] = new Opcode('\x82',"EXT1",Opcode::fnEXT1,Opcode::oprEXT1);
+    opcodes[EXT2] = new Opcode('\x83',"EXT2",Opcode::fnEXT2,Opcode::oprEXT2);
+    opcodes[EXT4] = new Opcode('\x84',"EXT4",Opcode::fnEXT4,Opcode::oprEXT4);
+    opcodes[TUPLE1] = new Opcode('\x85',"TUPLE1",Opcode::fnTUPLE1,Opcode::oprTUPLE1);
+    opcodes[TUPLE2] = new Opcode('\x86',"TUPLE2",Opcode::fnTUPLE2,Opcode::oprTUPLE2);
+    opcodes[TUPLE3] = new Opcode('\x87',"TUPLE3",Opcode::fnTUPLE3,Opcode::oprTUPLE3);
+    opcodes[TRUE] = new Opcode('\x88',"TRUE",Opcode::fnTRUE,Opcode::oprTRUE);
+    opcodes[FALSE] = new Opcode('\x89',"FALSE",Opcode::fnFALSE,Opcode::oprFALSE);
+    opcodes[LONG1] = new Opcode('\x8a',"LONG1",Opcode::fnLONG1,Opcode::oprLONG1);
+    opcodes[LONG4] = new Opcode('\x8b',"LONG4",Opcode::fnLONG4,Opcode::oprLONG4);
 }
-
+// These are Dummy Opcodes
+int Opcode::fnGLOBAL1(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack)
+{
+}
+int Opcode::fnGLOBAL2(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack)
+{
+}
 // push special markobject on stack
 int Opcode::fnMARK(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack)
 {
 	int forward;
 	forward = 0;
-	printf("Process MARK\n");
 	std::string strMARK;
 	it1++;
 	forward++;
@@ -95,7 +101,6 @@ int Opcode::fnMARK(ifstream &instream,std::string str1,std::string::iterator &it
 	putItem->allocateSpaceOnStack();
 	theStack.push(*putItem);
 	*/
-	printf("MARK\n");
 	
 	return forward;
 }
@@ -230,7 +235,6 @@ int Opcode::fnREDUCE(ifstream &instream,std::string str1,std::string::iterator &
 {
 	int forward;
 	forward = 0;
-	printf("Process REDUCE\n");
 	std::string strREDUCE;
 	it1++;
 	forward++;
@@ -238,7 +242,6 @@ int Opcode::fnREDUCE(ifstream &instream,std::string str1,std::string::iterator &
 	putItem= theStack->pop();
 	theStack.push(*putItem);
 	*/
-	printf("REDUCE\n");
 	
 	return forward;
 }
@@ -337,45 +340,54 @@ int Opcode::fnBUILD(ifstream &instream,std::string str1,std::string::iterator &i
 // push self.find_class(modname, name); 2 string args
 int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack)
 {
-	printf("Process GLOBAL\n");
+	StackItem *moduleItem,*nameItem;
 	std::string state;
 	std::string module;
 	std::string name;
 	int countNewline = 0;
 	int forward = 1;
 	it1++;
-	while (it1 != str1.end())
+	moduleItem = (StackItem*)malloc(sizeof(StackItem));
+	char *ptr;
+	char *buf;
+	buf = (char*)malloc(sizeof(char)*200);
+	ptr = buf;
+	int len;
+	len = 0;
+	while (it1 < str1.end())
         {
 	     int item;
-	     item = *it1;
-	     module.append(sizeof(char),*it1);
+	     *ptr++ = *it1;
 	     it1++;
 	     forward++;
+	     len++;
 	}
+	*ptr = '\0';
 	// Push new Class onto the Stack
-	StackItem *moduleItem,*nameItem;
-	moduleItem = theStack.pop();
-	strcpy(moduleItem->someString,module.c_str());
-	printf("%s\n",moduleItem->someString);
-	sprintf(moduleItem->opcode,"!");
+	moduleItem->someString=(char*)malloc(sizeof(char)*(len+1));
+	strcpy(moduleItem->someString,buf);
+	free(buf);
+	moduleItem->opcode = '!';
 	theStack.push(*moduleItem);
 	getline(instream,state);
 	std::string::iterator it;
 	int j = 0;
 	it = state.begin();
 	nameItem = (StackItem*)malloc(sizeof(StackItem));
-	while (it != state.end())
+	buf = (char*)malloc(sizeof(char)*200);
+	ptr = buf;
+	len = 0;
+	while (it < state.end())
         {
-	     int item;
-	     item = *it;
-	     name.append(sizeof(char),*it);
+	     *ptr++ = *it;
 	     it++;
-	     j++;
 	     forward++;
+	     len++;
 	}
-	strcpy(nameItem->someString,name.c_str());
-	printf("%s\n",nameItem->someString);
-	sprintf(nameItem->opcode,"|");
+	nameItem->someString=(char*)malloc(sizeof(char)*(len+1));
+	strcpy(nameItem->someString,buf);
+	free(buf);
+	nameItem->opcode = '~';
 	theStack.push(*nameItem);
     	return 0;
 }
@@ -384,7 +396,6 @@ int Opcode::fnDICT(ifstream &instream,std::string str1,std::string::iterator &it
 {
 	int forward;
 	forward = 0;
-	printf("Process DICT\n");
 	std::string strDICT;
 	it1++;
 	forward++;
@@ -392,7 +403,6 @@ int Opcode::fnDICT(ifstream &instream,std::string str1,std::string::iterator &it
 	putItem= theStack->pop();
 	theStack.push(*putItem);
 	*/
-	printf("DICT\n");
 	
 	return forward;
 }
@@ -526,7 +536,6 @@ int Opcode::fnOBJ(ifstream &instream,std::string str1,std::string::iterator &it1
 // store stack top in memo; index is string arg
 int Opcode::fnPUT(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack)    
 {
-	printf("Process PUT\n");
 	std::string strPut;
 	char theInt[10];
 	int countNewline = 0;
@@ -545,7 +554,6 @@ int Opcode::fnPUT(ifstream &instream,std::string str1,std::string::iterator &it1
 	putItem= theStack.pop();
 	putItem->someInt = atoi(theInt);
 	theStack.push(*putItem);
-	printf("PUT: %s\n",strPut.c_str());
 	
 	return forward;
 }
@@ -577,7 +585,6 @@ int Opcode::fnSETITEM(ifstream &instream,std::string str1,std::string::iterator 
 {
 	int forward;
 	forward = 0;
-	printf("Process SETITEM\n");
 	std::string strSETITEM;
 	it1++;
 	forward++;
@@ -585,7 +592,6 @@ int Opcode::fnSETITEM(ifstream &instream,std::string str1,std::string::iterator 
 	putItem= theStack->pop();
 	theStack.push(*putItem);
 	*/
-	printf("SETITEM\n");
 	
 	return forward;
 }
@@ -594,7 +600,6 @@ int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &i
 {
 	int forward;
 	forward = 0;
-	printf("Process TUPLE\n");
 	std::string strTUPLE;
 	it1++;
 	forward++;
@@ -602,7 +607,6 @@ int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &i
 	putItem= theStack->pop();
 	theStack.push(*putItem);
 	*/
-	printf("TUPLE\n");
 	
 	return forward;
 }
@@ -718,4 +722,124 @@ int Opcode::fnLONG4(ifstream &instream,std::string str1,std::string::iterator &i
 	//cout << "LONG4";
 	//cout << endl;
 	return 0;
+}
+// These are the print functions for the dummy opcodes, part of GLOBAL
+int Opcode::oprGLOBAL1(zval* subarray,StackItem* stackitem, int depth) {
+	char somestring[100];
+	printf("opr: name: %s",stackitem->someString);
+	sprintf(somestring,"name: %s",stackitem->someString);
+	add_next_index_string(subarray,somestring,1);
+}
+int Opcode::oprGLOBAL2(zval* subarray,StackItem* stackitem, int depth) {
+	char somestring[100];
+	printf("opr: module: %s",stackitem->someString);
+	sprintf(somestring,"module: %s",stackitem->someString);
+	add_next_index_string(subarray,somestring,1);
+}
+int Opcode::oprSTOP(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprMARK(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprPOP(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprPOP_MARK(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprDUP(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprFLOAT(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprINT(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprBININT(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprBININT1(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprLONG(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprBININT2(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprNONE(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprPERSID(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprBINPERSID(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprREDUCE(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprSTRING(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprBINSTRING(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprSHORT_BINSTRING(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprUNICODE(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprBINUNICODE(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprAPPEND(zval* subarray,StackItem* stackitem, int depth) {  
+}
+int Opcode::oprBUILD(zval* subarray,StackItem* stackitem, int depth) {  
+}
+int Opcode::oprGLOBAL(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprDICT(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprEMPTY_DICT(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprAPPENDS(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprGET(zval* subarray,StackItem* stackitem, int depth) {    
+}
+int Opcode::oprBINGET(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprINST(zval* subarray,StackItem* stackitem, int depth) { 
+}
+int Opcode::oprLONG_BINGET(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprLIST(zval* subarray,StackItem* stackitem, int depth) {     
+}
+int Opcode::oprEMPTY_LIST(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprOBJ(zval* subarray,StackItem* stackitem, int depth) {     
+}
+int Opcode::oprPUT(zval* subarray,StackItem* stackitem, int depth) {    
+	add_next_index_long(subarray,stackitem->someInt);
+}
+int Opcode::oprBINPUT(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprLONG_BINPUT(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprSETITEM(zval* subarray,StackItem* stackitem, int depth) {  
+}
+int Opcode::oprTUPLE(zval* subarray,StackItem* stackitem, int depth) {   
+}
+int Opcode::oprEMPTY_TUPLE(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprSETITEMS(zval* subarray,StackItem* stackitem, int depth) { 
+}
+int Opcode::oprBINFLOAT(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprPROTO(zval* subarray,StackItem* stackitem, int depth) {  
+}
+int Opcode::oprNEWOBJ(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprEXT1(zval* subarray,StackItem* stackitem, int depth) { 
+}
+int Opcode::oprEXT2(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprEXT4(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprTUPLE1(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprTUPLE2(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprTUPLE3(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprTRUE(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprFALSE(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprLONG1(zval* subarray,StackItem* stackitem, int depth) {
+}
+int Opcode::oprLONG4(zval* subarray,StackItem* stackitem, int depth) {
 }

@@ -3,14 +3,15 @@
 StackItem& StackItem::operator=(const StackItem& otherItem)
 {
 	int i = 0;
-	strcpy(opcode,otherItem.opcode);
+	opcode = otherItem.opcode;
+	someInt = otherItem.someInt;
+	someString = otherItem.someString;
 	return *this;
 }
 
 // Function to add item x to stack
 void Stack::push(StackItem x)
 {
-    printf("push onto stack\n");
     StackItem currentItem;
     if(!isfull()){
 	this->items[this->top] = x;
