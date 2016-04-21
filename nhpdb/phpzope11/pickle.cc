@@ -255,7 +255,7 @@ int Opcode::fnSTRING(ifstream &instream,std::string str1,std::string::iterator &
 	char *ptr;
 	char *buf;
 	int len;
-	buf = (char*)malloc(sizeof(char)*200);
+	buf = (char*)emalloc(sizeof(char)*200);
 	ptr = buf;
 	len = 0;
 	while (it1 != str1.end() && *it1 != '\177')
@@ -267,9 +267,9 @@ int Opcode::fnSTRING(ifstream &instream,std::string str1,std::string::iterator &
 	}
 	it1--;
 	stringItem = theStack.pop();
-	stringItem->someString=(char*)malloc(sizeof(char)*(len+1));
+	stringItem->someString=(char*)emalloc(sizeof(char)*(len+1));
 	strcpy(stringItem->someString,buf);
-	free(buf);
+	efree(buf);
 	theStack.push(*stringItem);
 	return forward;
 }
@@ -349,14 +349,14 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	int countNewline = 0;
 	int forward = 1;
 	it1++;
-	moduleItem = (StackItem*)malloc(sizeof(StackItem));
+	moduleItem = (StackItem*)emalloc(sizeof(StackItem));
 	char *ptr;
 	char *buf;
-	buf = (char*)malloc(sizeof(char)*200);
+	buf = (char*)emalloc(sizeof(char)*200);
 	ptr = buf;
 	int len;
 	len = 0;
-	while (it1 < str1.end())
+	while (it1 < str1.end() && *it1 != '\000')
         {
 	     int item;
 	     *ptr++ = *it1;
@@ -366,17 +366,17 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	}
 	*ptr = '\0';
 	// Push new Class onto the Stack
-	moduleItem->someString=(char*)malloc(sizeof(char)*(len+1));
+	moduleItem->someString=(char*)emalloc(sizeof(char)*(len+1));
 	strcpy(moduleItem->someString,buf);
-	free(buf);
+	efree(buf);
 	moduleItem->opcode = '!';
 	theStack.push(*moduleItem);
 	getline(instream,state);
 	std::string::iterator it;
 	int j = 0;
 	it = state.begin();
-	nameItem = (StackItem*)malloc(sizeof(StackItem));
-	buf = (char*)malloc(sizeof(char)*200);
+	nameItem = (StackItem*)emalloc(sizeof(StackItem));
+	buf = (char*)emalloc(sizeof(char)*200);
 	ptr = buf;
 	len = 0;
 	while (it < state.end())
@@ -386,9 +386,9 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	     forward++;
 	     len++;
 	}
-	nameItem->someString=(char*)malloc(sizeof(char)*(len+1));
+	nameItem->someString=(char*)emalloc(sizeof(char)*(len+1));
 	strcpy(nameItem->someString,buf);
-	free(buf);
+	efree(buf);
 	nameItem->opcode = '~';
 	theStack.push(*nameItem);
     	return 0;
@@ -428,32 +428,24 @@ int Opcode::fnAPPENDS(ifstream &instream,std::string str1,std::string::iterator 
 // push item from memo on stack; index is string arg
 int Opcode::fnGET(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack)
 {
-	std::string strGet;
+	std::string strPut;
+	char theInt[10];
 	int countNewline = 0;
-	int forward = 1;
-	it1++;
-	while (it1 != str1.end() && countNewline < 1)
+	int forward = 0;
+	while (it1 < str1.end())
         {
 	     int item;
 	     item = *it1;
-	     if (*it1 == '|')
-             {
-		countNewline++;
-		break;
-	     }
-             else
-             {
-		if (countNewline == 0)
-		{
-			strGet.append(sizeof(char),*it1);
-		}
-             }
+	     strPut.append(sizeof(char),*it1);
 	     it1++;
 	     forward++;
 	}
-        //cout << "GET: ";
-	//cout << strGet;
-	//cout << endl;
+	sprintf(theInt,"%s",strPut.c_str());
+	// Push new Class onto the Stack
+	StackItem *putItem;
+	putItem= theStack.pop();
+	putItem->someInt = atoi(theInt);
+	theStack.push(*putItem);
 	
 	return forward;
 }
@@ -728,13 +720,11 @@ int Opcode::fnLONG4(ifstream &instream,std::string str1,std::string::iterator &i
 // These are the print functions for the dummy opcodes, part of GLOBAL
 int Opcode::oprGLOBAL1(zval* subarray,StackItem* stackitem, int depth) {
 	char somestring[100];
-	printf("opr: name: %s",stackitem->someString);
 	sprintf(somestring,"name: %s",stackitem->someString);
 	add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprGLOBAL2(zval* subarray,StackItem* stackitem, int depth) {
 	char somestring[100];
-	printf("opr: module: %s",stackitem->someString);
 	sprintf(somestring,"module: %s",stackitem->someString);
 	add_next_index_string(subarray,somestring,1);
 }
@@ -771,7 +761,6 @@ int Opcode::oprREDUCE(zval* subarray,StackItem* stackitem, int depth) {
 }
 int Opcode::oprSTRING(zval* subarray,StackItem* stackitem, int depth) {
 	char somestring[100];
-	printf("opr: module: %s",stackitem->someString);
 	sprintf(somestring,"module: %s",stackitem->someString);
 	add_next_index_string(subarray,somestring,1);
 }

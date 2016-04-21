@@ -47,7 +47,7 @@ int PHPZope::retrieve_state(ifstream &instream,string state2,Stack &buildStack)
 	    {
 		return -1;
 	    }
-	    ptrStackItem = (StackItem*)malloc(sizeof(StackItem));
+	    ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
 	    for (int i = 0; i < OPCODE_COUNT; i++)
 	    {
 	    	Opcode *currentOpcode = myPickler->opcodes[i];
@@ -56,7 +56,6 @@ int PHPZope::retrieve_state(ifstream &instream,string state2,Stack &buildStack)
 		    char *someString;
 		    ptrStackItem->opcode = currentOpcode->opcode;
 	    	    buildStack.push(*ptrStackItem);
-		    //:jkhhprintf("current: %c, %i",currentOpcode->opcode,num++);
 	            result = (currentOpcode->opfunc)(instream,state2,it,currentOpcode,buildStack);
 		    this->currentStack = buildStack;
 		}
@@ -84,9 +83,12 @@ char* PHPZope::returnPickleFile()
 	}
 	else
 	{
-	    while (!infile.eof() )
+	    while (!infile.eof() && boolSTOP != 0)
             {
-		getline(infile,state);
+		if (0 == getline(infile,state))
+		{
+		   boolSTOP = 0;
+                }
 	        if ( -1 == this->retrieve_state(infile,state,theStack))
 		{
 		   boolSTOP =  0;
@@ -94,7 +96,7 @@ char* PHPZope::returnPickleFile()
 	    }
 	    infile.close();
 	    char* theString;
-	    theString = (char*)malloc(1800*sizeof(char));
+	    theString = (char*)emalloc(1800*sizeof(char));
 	    char* ptr;
 	    ptr = theString;
 	    int i;
