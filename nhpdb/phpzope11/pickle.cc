@@ -352,7 +352,7 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	moduleItem = (StackItem*)emalloc(sizeof(StackItem));
 	char *ptr;
 	char *buf;
-	buf = (char*)emalloc(sizeof(char)*200);
+	buf = (char*)malloc(sizeof(char)*200);
 	ptr = buf;
 	int len;
 	len = 0;
@@ -368,7 +368,7 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	// Push new Class onto the Stack
 	moduleItem->someString=(char*)emalloc(sizeof(char)*(len+1));
 	strcpy(moduleItem->someString,buf);
-	efree(buf);
+	free(buf);
 	moduleItem->opcode = '!';
 	theStack.push(*moduleItem);
 	getline(instream,state);
@@ -376,7 +376,7 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	int j = 0;
 	it = state.begin();
 	nameItem = (StackItem*)emalloc(sizeof(StackItem));
-	buf = (char*)emalloc(sizeof(char)*200);
+	buf = (char*)malloc(sizeof(char)*200);
 	ptr = buf;
 	len = 0;
 	while (it < state.end())
@@ -388,7 +388,7 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	}
 	nameItem->someString=(char*)emalloc(sizeof(char)*(len+1));
 	strcpy(nameItem->someString,buf);
-	efree(buf);
+	free(buf);
 	nameItem->opcode = '~';
 	theStack.push(*nameItem);
     	return 0;
