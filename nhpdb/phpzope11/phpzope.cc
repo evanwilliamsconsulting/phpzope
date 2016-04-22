@@ -191,23 +191,31 @@ PHP_METHOD(PHPZope, returnPickleFile)
     zval *mysubarray,*opcodesubarray;
     Stack theStack;
 
+    PHPZope *phpzope;
+    phpzope_object *obj = (phpzope_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+    phpzope = obj->phpzope;
     array_init(return_value);
+/*
     add_index_long(return_value, 42, 123);
     add_next_index_string(return_value,"I should now be found at index 43", 1);
     add_next_index_string(return_value,"I'm at 44!", 1);
     mystr = estrdup("Forty Five");
     add_next_index_string(return_value,"pi",3.1415926535);
-    PHPZope *phpzope;
-    phpzope_object *obj = (phpzope_object *)zend_object_store_get_object(
-        getThis() TSRMLS_CC);
-    phpzope = obj->phpzope;
+    add_next_index_string(return_value,"PHPZOPE", 1);
+    add_next_index_string(return_value,"Stack Depth:", 1);
+    add_index_long(return_value, phpzope->retrieveStackDepth(), 1);
+    mystr = estrdup("Forty Five");
+    add_next_index_string(return_value,"pi",3.1415926535);
+    add_next_index_long(return_value,1);
+*/
     if (phpzope != NULL) {
 	phpzope->returnPickleFile();
-	ALLOC_INIT_ZVAL(mysubarray);
-	array_init(mysubarray);
+	//ALLOC_INIT_ZVAL(mysubarray);
+	//array_init(mysubarray);
 	char somestring[100];
 	sprintf(somestring,"stackDepth %i",phpzope->retrieveStackDepth());
-	add_next_index_string(mysubarray,somestring,1);
+	add_next_index_string(return_value,somestring,1);
 	int stackDepth = phpzope->retrieveStackDepth();
 	Stack theStack = phpzope->retrieveCurrentStack();
 	Pickle *myPickler = new Pickle();
@@ -229,11 +237,11 @@ PHP_METHOD(PHPZope, returnPickleFile)
 		    add_next_index_long(opcodesubarray,depth);
 	            result = (currentOpcode->opr)(opcodesubarray,stackItem,depth);
 		    sprintf(somestring,"opcode: %c, depth: %i",stackItem->opcode,depth);
-		    add_assoc_zval(mysubarray,somestring,opcodesubarray); 
+		    add_assoc_zval(return_value,somestring,opcodesubarray); 
 		}
 	    }
 	}
-	add_assoc_zval(return_value,"subarray",mysubarray);
+	//add_assoc_zval(return_value,"subarray",mysubarray);
     }
     //RETURN_NULL();
 } 
