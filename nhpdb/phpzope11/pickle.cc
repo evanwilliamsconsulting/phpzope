@@ -248,6 +248,7 @@ int Opcode::fnREDUCE(ifstream &instream,std::string str1,std::string::iterator &
 // push string; NL-terminated string argument
 int Opcode::fnSTRING(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack)
 {
+	/*
 	StackItem *stringItem;
 	std::string strString;
 	int countApostrophe = 0;
@@ -265,13 +266,14 @@ int Opcode::fnSTRING(ifstream &instream,std::string str1,std::string::iterator &
 	     it1++;
 	     forward++;
 	}
-	it1--;
 	stringItem = theStack.pop();
 	stringItem->someString=(char*)emalloc(sizeof(char)*(len+1));
 	strcpy(stringItem->someString,buf);
 	efree(buf);
 	theStack.push(*stringItem);
 	return forward;
+*/
+	return 0;
 }
 // push string; counted binary string argument
 int Opcode::fnBINSTRING(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,Stack &theStack)
