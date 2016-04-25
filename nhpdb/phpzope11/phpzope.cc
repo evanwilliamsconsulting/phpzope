@@ -12,13 +12,13 @@ PHPZope::~PHPZope() {
 int PHPZope::returnValue() {
 	return 8;
 }
-Stack &PHPZope::retrieveCurrentStack()
+stack<StackItem>& PHPZope::retrieveCurrentStack()
 {
 	return this->currentStack;
 }
 int PHPZope::retrieveStackDepth() {
-	Stack theStack = this->currentStack;
-	int stackDepth = theStack.depth();
+	stack<StackItem> theStack = this->currentStack;
+	int stackDepth = theStack.size();
 	return stackDepth;
 }
 int PHPZope::readPickle(char *src)
@@ -29,7 +29,7 @@ int PHPZope::readPickle(char *src)
 	return 0;
 } 
 
-int PHPZope::retrieve_state(ifstream &instream,string state2,Stack &buildStack)
+int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack)
         {
 	std::string filename = "state.txt";
 	StackItem *ptrStackItem;
@@ -43,33 +43,30 @@ int PHPZope::retrieve_state(ifstream &instream,string state2,Stack &buildStack)
 	int num = 0;
 	do
 	{
-	    if (*it == '|')
-	    {
-		return -1;
-	    }
-	    ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
 	    for (int i = 0; i < OPCODE_COUNT; i++)
 	    {
 	    	Opcode *currentOpcode = myPickler->opcodes[i];
 	        if (currentOpcode->opcode == *it)
                 {
+		    //printf("opcode: %c\n",*it);
 		    char *someString;
+	            ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
 		    ptrStackItem->opcode = currentOpcode->opcode;
-	    	    buildStack.push(*ptrStackItem);
-	            result = (currentOpcode->opfunc)(instream,state2,it,currentOpcode,buildStack);
-		    this->currentStack = buildStack;
+	    	    theStack.push(*ptrStackItem);
+		    //printf("push\n");
+	            result = (currentOpcode->opfunc)(infile,state2,it,currentOpcode,*ptrStackItem,theStack);
 		}
 	    }
-    	} while ( it != state2.end() && *it > 0 && result != 0);
+    	} while ( it < state2.end() && *it > 0 && result != 0);
 
+	printf("\n");
     	return 0;
 } // retrieve_state()
 
-char* PHPZope::returnPickleFile()
+char* PHPZope::returnPickleFile(stack<StackItem>& theStack)
 {
 	std::string state;
 	int j;
-	Stack theStack;
 	int boolSTOP;
 
 	ifstream infile;
@@ -83,24 +80,13 @@ char* PHPZope::returnPickleFile()
 	}
 	else
 	{
-	    while (!infile.eof() && boolSTOP != 0)
+	    while (!infile.eof())
             {
-		if (0 == getline(infile,state))
-		{
-		   boolSTOP = 0;
-                }
-	        if ( -1 == this->retrieve_state(infile,state,theStack))
-		{
-		   boolSTOP =  0;
-		}
+		getline(infile,state);
+	        this->retrieve_state(infile,state,theStack);
 	    }
 	    infile.close();
-	    char* theString;
-	    theString = (char*)emalloc(1800*sizeof(char));
-	    char* ptr;
-	    ptr = theString;
 	    int i;
-	    int stackDepth = theStack.depth();
         }
 	return this->filename;
 }
@@ -189,51 +175,62 @@ PHP_METHOD(PHPZope, returnPickleFile)
 {
     char *mystr;
     zval *mysubarray,*opcodesubarray;
-    Stack theStack;
+    StackItem *ptrStackItem;
 
     array_init(return_value);
+    /*
     add_index_long(return_value, 42, 123);
     add_next_index_string(return_value,"I should now be found at index 43", 1);
     add_next_index_string(return_value,"I'm at 44!", 1);
     mystr = estrdup("Forty Five");
     add_next_index_string(return_value,"pi",3.1415926535);
+    */
     PHPZope *phpzope;
     phpzope_object *obj = (phpzope_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
     phpzope = obj->phpzope;
     if (phpzope != NULL) {
-	phpzope->returnPickleFile();
-	ALLOC_INIT_ZVAL(mysubarray);
-	array_init(mysubarray);
+	//ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
+	//ptrStackItem->opcode = '!';
+	stack<StackItem> theStack = phpzope->retrieveCurrentStack();
+	//theStack.push(*ptrStackItem);
+	phpzope->returnPickleFile(theStack);
+	//ALLOC_INIT_ZVAL(mysubarray);
+	//array_init(mysubarray);
 	char somestring[100];
-	sprintf(somestring,"stackDepth %i",phpzope->retrieveStackDepth());
-	add_next_index_string(mysubarray,somestring,1);
-	int stackDepth = phpzope->retrieveStackDepth();
-	Stack theStack = phpzope->retrieveCurrentStack();
+	int depth = theStack.size();
+	sprintf(somestring,"stackDepth %i",depth);
+	//add_next_index_string(mysubarray,somestring,1);
+	add_next_index_string(return_value,somestring,1);
+	
+	int stackDepth = depth;
 	Pickle *myPickler = new Pickle();
 	while (stackDepth > 0 )
 	{
 	     int result;
-	     int depth;
-	     StackItem* stackItem = theStack.pop();
-	     stackDepth--;
-	     sprintf(somestring,"currentOpcode: %c",stackItem->opcode);
+	     StackItem stackItem = theStack.top();
+	     sprintf(somestring,"currentOpcode: %c",stackItem.opcode);
 	     for (int i = 0; i < OPCODE_COUNT; i++)
 	     {
 	    	Opcode *currentOpcode = myPickler->opcodes[i];
-	        if (currentOpcode->opcode == stackItem->opcode)
+	        if (currentOpcode->opcode == stackItem.opcode)
                 {
-		    depth = theStack.depth();
+		    depth = theStack.size();
 		    ALLOC_INIT_ZVAL(opcodesubarray);
 		    array_init(opcodesubarray);
 		    add_next_index_long(opcodesubarray,depth);
-	            result = (currentOpcode->opr)(opcodesubarray,stackItem,depth);
-		    sprintf(somestring,"opcode: %c, depth: %i",stackItem->opcode,depth);
-		    add_assoc_zval(mysubarray,somestring,opcodesubarray); 
+	            result = (currentOpcode->opr)(opcodesubarray,&stackItem,depth);
+		    sprintf(somestring,"opcode: %c, depth: %i",stackItem.opcode,depth);
+		    //add_assoc_zval(mysubarray,somestring,opcodesubarray); 
+		    add_assoc_zval(return_value,somestring,opcodesubarray); 
 		}
 	    }
+	    stackDepth--;
+	    theStack.pop();
 	}
-	add_assoc_zval(return_value,"subarray",mysubarray);
+	
+	//add_assoc_zval(return_value,"subarray",mysubarray);
+	//add_assoc_zval(return_value,"subarray",mysubarray);
     }
     //RETURN_NULL();
 } 

@@ -1,7 +1,7 @@
-srcdir = /opt/phpzope/nhpdb/phpzope11
-builddir = /opt/phpzope/nhpdb/phpzope11
-top_srcdir = /opt/phpzope/nhpdb/phpzope11
-top_builddir = /opt/phpzope/nhpdb/phpzope11
+srcdir = /zodb/nhpdb/phpzope11
+builddir = /zodb/nhpdb/phpzope11
+top_srcdir = /zodb/nhpdb/phpzope11
+top_builddir = /zodb/nhpdb/phpzope11
 EGREP = /bin/grep -E
 SED = /bin/sed
 CONFIGURE_COMMAND = './configure' '--enable-phpzope'
@@ -22,7 +22,7 @@ prefix = /usr
 exec_prefix = $(prefix)
 libdir = ${exec_prefix}/lib
 prefix = /usr
-phplibdir = /opt/phpzope/nhpdb/phpzope11/modules
+phplibdir = /zodb/nhpdb/phpzope11/modules
 phpincludedir = /usr/local/mysql/include/php
 CC = cc
 CFLAGS = -g -O2
@@ -177,12 +177,12 @@ distclean: clean
 
 .PHONY: all clean install distclean test
 .NOEXPORT:
-phpzope.lo: /opt/phpzope/nhpdb/phpzope11/phpzope.cc
-	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/opt/phpzope/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /opt/phpzope/nhpdb/phpzope11/phpzope.cc -o phpzope.lo 
-pickle.lo: /opt/phpzope/nhpdb/phpzope11/pickle.cc
-	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/opt/phpzope/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /opt/phpzope/nhpdb/phpzope11/pickle.cc -o pickle.lo 
-stackitem.lo: /opt/phpzope/nhpdb/phpzope11/stackitem.cc
-	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/opt/phpzope/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /opt/phpzope/nhpdb/phpzope11/stackitem.cc -o stackitem.lo 
+phpzope.lo: /zodb/nhpdb/phpzope11/phpzope.cc
+	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/zodb/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /zodb/nhpdb/phpzope11/phpzope.cc -o phpzope.lo 
+pickle.lo: /zodb/nhpdb/phpzope11/pickle.cc
+	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/zodb/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /zodb/nhpdb/phpzope11/pickle.cc -o pickle.lo 
+stackitem.lo: /zodb/nhpdb/phpzope11/stackitem.cc
+	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/zodb/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /zodb/nhpdb/phpzope11/stackitem.cc -o stackitem.lo 
 $(phplibdir)/phpzope.la: ./phpzope.la
 	$(LIBTOOL) --mode=install cp ./phpzope.la $(phplibdir)
 

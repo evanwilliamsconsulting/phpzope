@@ -26,32 +26,3 @@ class StackItem {
 	}
 	StackItem& operator= (const StackItem &otherItem);
 };
-
-class Stack {
-    public:
-        Stack()
-	{
-	   top=0;
-	}
-	int depth()
-	{
-		return top;
-	}
-        void push(StackItem);
-        StackItem *pop();
-        bool isempty() {
-		if (top==0)
-			return -1;
-		else
-			return 0;
-        }
-        bool isfull() {
-		if (top==1000)
-			return -1;
-		else
-			return 0;
-	}
-    private:
-        StackItem items[1001];
-        int top;
-};
