@@ -52,6 +52,7 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
 		    char *someString;
 	            ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
 		    ptrStackItem->opcode = currentOpcode->opcode;
+		    ptrStackItem->theMark = 0;
 	    	    theStack.push(*ptrStackItem);
 		    //printf("push\n");
 	            result = (currentOpcode->opfunc)(infile,state2,it,currentOpcode,*ptrStackItem,theStack);

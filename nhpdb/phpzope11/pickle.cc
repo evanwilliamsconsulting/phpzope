@@ -93,9 +93,9 @@ int Opcode::fnMARK(ifstream &instream,std::string str1,std::string::iterator &it
 {
 	int forward;
 	forward = 0;
-	std::string strMARK;
 	it1++;
-	forward++;
+	std::string strMARK;
+	theStackItem.theMark = 8;
 	
 	return forward;
 }
@@ -571,6 +571,8 @@ int Opcode::fnSETITEM(ifstream &instream,std::string str1,std::string::iterator 
 // build tuple from topmost stack Stack
 int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack)
 {
+	// Everything since the last mark becomes the tuple
+	// What is a tuple?
 	int forward;
 	forward = 0;
 	std::string strTUPLE;
@@ -706,6 +708,9 @@ int Opcode::oprGLOBAL2(zval* subarray,StackItem* stackitem, int depth) {
 int Opcode::oprSTOP(zval* subarray,StackItem* stackitem, int depth) {
 }
 int Opcode::oprMARK(zval* subarray,StackItem* stackitem, int depth) {
+        char somestring[100];
+	sprintf(somestring,"MARK ON: %i",stackitem->theMark);
+        add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprPOP(zval* subarray,StackItem* stackitem, int depth) {
 }

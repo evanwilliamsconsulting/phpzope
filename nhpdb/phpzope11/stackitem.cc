@@ -6,5 +6,6 @@ StackItem& StackItem::operator=(const StackItem& otherItem)
 	opcode = otherItem.opcode;
 	someInt = otherItem.someInt;
 	someString = otherItem.someString;
+	theMark = otherItem.theMark;
 	return *this;
 }
