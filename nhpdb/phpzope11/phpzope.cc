@@ -29,7 +29,7 @@ int PHPZope::readPickle(char *src)
 	return 0;
 } 
 
-int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack)
+int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack,int& lastMark)
         {
 	std::string filename = "state.txt";
 	StackItem *ptrStackItem;
@@ -53,9 +53,12 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
 	            ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
 		    ptrStackItem->opcode = currentOpcode->opcode;
 		    ptrStackItem->theMark = 0;
+		    ptrStackItem->lastMark = lastMark;
 	    	    theStack.push(*ptrStackItem);
 		    //printf("push\n");
 	            result = (currentOpcode->opfunc)(infile,state2,it,currentOpcode,*ptrStackItem,theStack);
+		    ptrStackItem = &theStack.top();
+		    lastMark = ptrStackItem->lastMark;	
 		}
 	    }
     	} while ( it < state2.end() && *it > 0 && result != 0);
@@ -69,6 +72,7 @@ char* PHPZope::returnPickleFile(stack<StackItem>& theStack)
 	std::string state;
 	int j;
 	int boolSTOP;
+	int lastMark = 0;
 
 	ifstream infile;
 
@@ -84,7 +88,7 @@ char* PHPZope::returnPickleFile(stack<StackItem>& theStack)
 	    while (!infile.eof())
             {
 		getline(infile,state);
-	        this->retrieve_state(infile,state,theStack);
+	        this->retrieve_state(infile,state,theStack,lastMark);
 	    }
 	    infile.close();
 	    int i;
@@ -221,7 +225,7 @@ PHP_METHOD(PHPZope, returnPickleFile)
 		    array_init(opcodesubarray);
 		    add_next_index_long(opcodesubarray,depth);
 	            result = (currentOpcode->opr)(opcodesubarray,&stackItem,depth);
-		    sprintf(somestring,"opcode: %c, depth: %i",stackItem.opcode,depth);
+		    sprintf(somestring,"opcode: %c, depth: %i, lastMark %i",stackItem.opcode,depth,stackItem.lastMark);
 		    //add_assoc_zval(mysubarray,somestring,opcodesubarray); 
 		    add_assoc_zval(return_value,somestring,opcodesubarray); 
 		}

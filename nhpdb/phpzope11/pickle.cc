@@ -95,7 +95,12 @@ int Opcode::fnMARK(ifstream &instream,std::string str1,std::string::iterator &it
 	forward = 0;
 	it1++;
 	std::string strMARK;
-	theStackItem.theMark = 8;
+	// Find current Stack Depth
+	int stackDepth = theStack.size();
+	StackItem *theItem;
+	theItem = &theStack.top();
+	theItem->theMark = stackDepth;
+	theItem->lastMark = stackDepth;
 	
 	return forward;
 }
@@ -226,6 +231,19 @@ int Opcode::fnBINPERSID(ifstream &instream,std::string str1,std::string::iterato
 	return 0;
 }
 // apply callable to argtuple, both on stack
+// This is a bit of gobblelty gook.
+// Because
+// Essentially fnREDUCE takes the topmost element on the stack
+// Be it a tuple or whatever
+// And applies the earlier function to it
+// Which is great, except in the first case of a pickle
+// The earlier function is the undocumented see
+// http://bugs.python.org/issue3816
+// __newobj__ function: so if that is the case
+// it means go create a new object
+// since we are concentrating on a PHP output
+// that means to me that whatever element is called by the tuple
+// should have a matching PHP class that is available to the extension.
 int Opcode::fnREDUCE(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack)
 {
 	int forward;
@@ -332,7 +350,10 @@ int Opcode::fnBUILD(ifstream &instream,std::string str1,std::string::iterator &i
 // push self.find_class(modname, name); 2 string args
 int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack)
 {
-	StackItem *moduleItem,*nameItem;
+	StackItem *moduleItem,*nameItem,*currentItem;
+	currentItem=&theStack.top();
+	int lastMark;
+	lastMark = currentItem->lastMark;
 	std::string state;
 	std::string module;
 	std::string name;
@@ -355,6 +376,7 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	}
 	// Push new Class onto the Stack
 	moduleItem->someString=(char*)emalloc(sizeof(char)*(len+1));
+	moduleItem->lastMark = lastMark;
 	strcpy(moduleItem->someString,buf);
 	efree(buf);
 	moduleItem->opcode = '!';
@@ -377,6 +399,7 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	}
 	nameItem->someString=(char*)emalloc(sizeof(char)*(len+1));
 	strcpy(nameItem->someString,buf);
+	nameItem->lastMark = lastMark;
 	efree(buf);
 	nameItem->opcode = '~';
 	theStack.push(*nameItem);
@@ -531,6 +554,14 @@ int Opcode::fnPUT(ifstream &instream,std::string str1,std::string::iterator &it1
 	StackItem putItem;
 	putItem= theStack.top();
 	putItem.someInt = atoi(theInt);
+	// Find current Stack Depth
+	/*
+	int stackDepth = theStack.size();
+	StackItem *theItem;
+	theItem = &theStack.top();
+	theItem->theMark = stackDepth;
+	theItem->lastMark = stackDepth;
+	*/
 	
 	return forward;
 }
@@ -573,13 +604,46 @@ int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &i
 {
 	// Everything since the last mark becomes the tuple
 	// What is a tuple?
+	StackItem *theItem,*tupleItem;
 	int forward;
-	forward = 0;
-	std::string strTUPLE;
-	it1++;
-	forward++;
-	
-	return forward;
+	int len;
+	int index;
+	char moduleName[100];
+	char className[100];
+        forward = 0;
+	char theOpcode;
+	do
+	{
+	    theStack.pop();
+	    theItem=&theStack.top();
+	    theOpcode = theItem->opcode;
+	    // harvest module name
+	    if (theOpcode == '!')
+            {
+		strcpy(moduleName,theItem->someString);
+	    }
+	    // harvest class name
+            if (theOpcode == '~')
+            {
+		strcpy(className,theItem->someString);
+            }
+            // harvest index from fnPUT
+	    if (theOpcode == 'p')
+            {
+		index = theItem->someInt;
+            }
+	} while (theOpcode != '(');
+
+	theStack.pop();
+	tupleItem = &theStack.top();
+	tupleItem->initializeTuple();
+	tupleItem->setIndex(index);
+	tupleItem->setModuleName(moduleName);
+	tupleItem->setClassName(className);
+
+	tupleItem->opcode = 't';
+
+	return 0;
 }
 // push empty tuple
 int Opcode::fnEMPTY_TUPLE(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack)
@@ -709,7 +773,7 @@ int Opcode::oprSTOP(zval* subarray,StackItem* stackitem, int depth) {
 }
 int Opcode::oprMARK(zval* subarray,StackItem* stackitem, int depth) {
         char somestring[100];
-	sprintf(somestring,"MARK ON: %i",stackitem->theMark);
+	sprintf(somestring,"MARK ON: %i,%i",stackitem->theMark,stackitem->lastMark);
         add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprPOP(zval* subarray,StackItem* stackitem, int depth) {
@@ -788,6 +852,11 @@ int Opcode::oprLONG_BINPUT(zval* subarray,StackItem* stackitem, int depth) {
 int Opcode::oprSETITEM(zval* subarray,StackItem* stackitem, int depth) {  
 }
 int Opcode::oprTUPLE(zval* subarray,StackItem* stackitem, int depth) {   
+	char somestring[100];
+	
+	sprintf(somestring,"index: %i, module: %s, class: %s",stackitem->getIndex(),stackitem->getModuleName(),stackitem->getClassName());
+	//sprintf(somestring,"index: , module: , class: ");
+	add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprEMPTY_TUPLE(zval* subarray,StackItem* stackitem, int depth) {
 }

@@ -40,7 +40,7 @@ public:
     int returnValue();
     int readPickle(char *strFile);
     char* returnPickleFile(stack<StackItem>& theStack);
-    int retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack);
+    int retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack,int& lastMark);
     char* returnModuleName();
     char* returnKlassName();
     stack<StackItem> currentStack;
