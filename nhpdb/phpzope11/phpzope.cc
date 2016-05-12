@@ -16,6 +16,10 @@ stack<StackItem>& PHPZope::retrieveCurrentStack()
 {
 	return this->currentStack;
 }
+stack<StackItem>& PHPZope::retrieveCurrentMemo()
+{
+	return this->theMemo;
+}
 int PHPZope::retrieveStackDepth() {
 	stack<StackItem> theStack = this->currentStack;
 	int stackDepth = theStack.size();
@@ -29,7 +33,7 @@ int PHPZope::readPickle(char *src)
 	return 0;
 } 
 
-int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack,int& lastMark)
+int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack,int& lastMark,stack<StackItem>& theMemo)
         {
 	std::string filename = "state.txt";
 	StackItem *ptrStackItem;
@@ -56,7 +60,7 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
 		    ptrStackItem->lastMark = lastMark;
 	    	    theStack.push(*ptrStackItem);
 		    //printf("push\n");
-	            result = (currentOpcode->opfunc)(infile,state2,it,currentOpcode,*ptrStackItem,theStack);
+	            result = (currentOpcode->opfunc)(infile,state2,it,currentOpcode,*ptrStackItem,theStack,theMemo);
 		    ptrStackItem = &theStack.top();
 		    lastMark = ptrStackItem->lastMark;	
 		}
@@ -67,7 +71,7 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
     	return 0;
 } // retrieve_state()
 
-char* PHPZope::returnPickleFile(stack<StackItem>& theStack)
+char* PHPZope::returnPickleFile(stack<StackItem>& theStack,stack<StackItem>& theMemo)
 {
 	std::string state;
 	int j;
@@ -88,7 +92,7 @@ char* PHPZope::returnPickleFile(stack<StackItem>& theStack)
 	    while (!infile.eof())
             {
 		getline(infile,state);
-	        this->retrieve_state(infile,state,theStack,lastMark);
+	        this->retrieve_state(infile,state,theStack,lastMark,theMemo);
 	    }
 	    infile.close();
 	    int i;
@@ -176,6 +180,30 @@ PHP_METHOD(PHPZope, readPickle)
     }
     RETURN_NULL();
 }
+PHP_METHOD(PHPZope, setPicklePath)
+{
+    PHPZope *phpzope;
+    char *ptr,*ptr2;
+    char name[100];
+    int name_len;
+    phpzope_object *obj = (phpzope_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+    phpzope = obj->phpzope;
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &ptr, &name_len) == FAILURE) {
+        RETURN_NULL();
+    }
+    ptr2 = name;
+    for (int i=0;i<name_len;i++)
+    {
+	*ptr2++ = *ptr++;
+    }
+    *ptr2 = '\0';
+    ptr2 = name;
+    if (phpzope != NULL) {
+        phpzope->readPickle(ptr2);
+    }
+    RETURN_NULL();
+}
 PHP_METHOD(PHPZope, returnPickleFile)
 {
     char *mystr;
@@ -198,10 +226,9 @@ PHP_METHOD(PHPZope, returnPickleFile)
 	//ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
 	//ptrStackItem->opcode = '!';
 	stack<StackItem> theStack = phpzope->retrieveCurrentStack();
+	stack<StackItem> theMemo = phpzope->retrieveCurrentMemo();
 	//theStack.push(*ptrStackItem);
-	phpzope->returnPickleFile(theStack);
-	//ALLOC_INIT_ZVAL(mysubarray);
-	//array_init(mysubarray);
+	phpzope->returnPickleFile(theStack,theMemo);
 	char somestring[100];
 	int depth = theStack.size();
 	sprintf(somestring,"stackDepth %i",depth);
@@ -233,8 +260,41 @@ PHP_METHOD(PHPZope, returnPickleFile)
 	    stackDepth--;
 	    theStack.pop();
 	}
-	
-	//add_assoc_zval(return_value,"subarray",mysubarray);
+
+	// Now print the memo
+	ALLOC_INIT_ZVAL(mysubarray);
+	array_init(mysubarray);
+	add_next_index_string(mysubarray,somestring,1);
+	depth = theMemo.size();
+	int memoDepth = depth;
+	while (memoDepth > 0 )
+	{
+	     int result;
+	     StackItem memoItem = theMemo.top();
+	     sprintf(somestring,"Memo: currentOpcode: %c",memoItem.opcode);
+	     for (int i = 0; i < OPCODE_COUNT; i++)
+	     {
+	    	Opcode *currentOpcode = myPickler->opcodes[i];
+	        if (currentOpcode->opcode == memoItem.opcode)
+                {
+		    depth = theMemo.size();
+		    ALLOC_INIT_ZVAL(opcodesubarray);
+		    array_init(opcodesubarray);
+		    add_next_index_long(opcodesubarray,depth);
+	            result = (currentOpcode->opr)(opcodesubarray,&memoItem,depth);
+		    sprintf(somestring,"opcode: %c, depth: %i, lastMark %i",memoItem.opcode,depth,memoItem.lastMark);
+		    add_assoc_zval(mysubarray,somestring,opcodesubarray); 
+		    //add_assoc_zval(return_value,somestring,opcodesubarray); 
+		}
+	    }
+	    memoDepth--;
+	    theMemo.pop();
+	}
+
+	// Now print the memo
+
+
+	add_assoc_zval(return_value,"theMemo",mysubarray);
 	//add_assoc_zval(return_value,"subarray",mysubarray);
     }
     //RETURN_NULL();

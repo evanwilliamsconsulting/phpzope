@@ -39,13 +39,15 @@ public:
     ~PHPZope();
     int returnValue();
     int readPickle(char *strFile);
-    char* returnPickleFile(stack<StackItem>& theStack);
-    int retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack,int& lastMark);
+    char* returnPickleFile(stack<StackItem>& theStack,stack<StackItem>& theMemo);
+    int retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack,int& lastMark,stack<StackItem>& theMemo);
     char* returnModuleName();
     char* returnKlassName();
     stack<StackItem> currentStack;
+    stack<StackItem> theMemo;
     int retrieveStackDepth();
     stack<StackItem>& retrieveCurrentStack();
+    stack<StackItem>& retrieveCurrentMemo();
 private:
     char filename[100];
     char buffer[1000];

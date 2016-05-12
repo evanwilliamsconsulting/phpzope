@@ -4640,7 +4640,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
   old_IFS=$IFS
-  for ac_src in phpzope.cc pickle.cc stackitem.cc; do
+  for ac_src in phpzope.cc pickle.cc stackitem.cc tuple.cc dict.cc; do
 
       IFS=.
       set $ac_src

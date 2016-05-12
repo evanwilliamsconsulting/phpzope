@@ -1225,7 +1225,11 @@ class Unpickler:
 
     def load_get(self):
 	print "g"
-        self.append(self.memo[self.readline()[:-1]])
+	item = self.readline()
+	print "item"
+	print item
+	print self.memo[item[:-1]]
+        self.append(self.memo[item[:-1]])
     dispatch[GET] = load_get
 
     def load_binget(self):
@@ -1242,10 +1246,14 @@ class Unpickler:
 
     def load_put(self):
 	putValue = self.readline()
+	print "putValue"
+	print putValue
         self.memo[putValue[:-1]] = self.stack[-1]
 	print "%spPUT: %s" % (self.diag,putValue)
 	print "memo:"
 	print self.memo
+	print "memo test"
+	#print self.memo[2[:-1]]
 	print "%spPUT_END" % self.diag
     dispatch[PUT] = load_put
 

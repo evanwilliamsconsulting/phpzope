@@ -12,6 +12,7 @@
 #include "php.h"
 
 #include "tuple.h"
+#include "dict.h"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ class StackItem {
         int someInt;
 	char* someString;
 	Tuple* someTuple;
+	Dict* someDict;
 	int theMark;
 	int lastMark;
         StackItem()
@@ -35,13 +37,20 @@ class StackItem {
 	    theMark = otherItem.theMark;
 	    lastMark = otherItem.lastMark;
 	    someTuple = otherItem.someTuple;
+	    someDict = otherItem.someDict;
 	}
 	StackItem& operator= (const StackItem &otherItem);
 	void initializeTuple();
+	void initializeDict();
+	void insertDictPair(char* theKey,char* theValue);
 	void setIndex(int theIndex);
 	void setModuleName(char* theModuleName);
 	void setClassName(char* theClassName);
+	void setAsObject();
+	void freeMemory();
 	char* getModuleName();
 	char* getClassName();
+	void getString(char* theCharString);
+	char* getDict();
 	int getIndex();
 };
