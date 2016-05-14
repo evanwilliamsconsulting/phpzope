@@ -531,21 +531,12 @@ int Opcode::fnGET(ifstream &instream,std::string str1,std::string::iterator &it1
 	theStack.pop();
 	// For starters dump contents of memo onto stack.
 	StackItem *memoItem;
-	stack<StackItem> reverseStack;
-	do {
-	    memoItem=&theMemo.top();
-	    // push the memoItem onto the stack
-	    reverseStack.push(*memoItem);
-	    theMemo.pop();
-	}
-	while (!theMemo.empty() && getLevel-- >= 0);
-	do
-	{
-	    memoItem=&reverseStack.top();
-	    theStack.push(*memoItem);
-	    reverseStack.pop();
-	}
-	while (!reverseStack.empty());
+	memoItem=&theMemo.top();
+	// push the memoItem onto the stack
+	theStack.push(*memoItem);
+	theMemo.pop();
+	memoItem=&theMemo.top();
+	theStack.push(*memoItem);
 	
 	return 1;
 }
@@ -731,7 +722,7 @@ int Opcode::fnSETITEM(ifstream &instream,std::string str1,std::string::iterator 
 	        strcpy(ptrValue,valueItem->someString);
 	        theStack.pop();
 		keyItem = &theStack.top();
-		if (keyItem->opcode == 'S')
+		if (keyItem->opcode == 'S' || keyItem->opcode == '~')
 		{
 	            onTarget = 1;
 		}
@@ -759,10 +750,7 @@ int Opcode::fnSETITEM(ifstream &instream,std::string str1,std::string::iterator 
 
 
 	
-	if (forward != 0)
-		return 1;
-	else
-		return 0;
+        return 1;
 }
 // build tuple from topmost stack Stack
 int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
