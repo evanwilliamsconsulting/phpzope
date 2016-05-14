@@ -51,6 +51,7 @@ public:
 private:
     char filename[100];
     char buffer[1000];
+    int continueSHORT_BINSTRING;
 };
 
 zend_object_handlers phpzope_object_handlers;

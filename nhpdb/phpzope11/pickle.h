@@ -22,6 +22,7 @@ enum pycodes {
   STRING,
   BINSTRING,
   SHORT_BINSTRING,
+  SHORT_BINSTRING2,
   UNICODE,
   BINUNICODE,
   APPEND,  
@@ -105,6 +106,7 @@ using namespace std;
             static int fnSTRING(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo);
             static int fnBINSTRING(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo);
             static int fnSHORT_BINSTRING(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo);
+            static int fnSHORT_BINSTRING2(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo);
             static int fnUNICODE(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo);
             static int fnBINUNICODE(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo);
             static int fnAPPEND(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo);  

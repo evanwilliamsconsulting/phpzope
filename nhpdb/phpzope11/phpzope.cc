@@ -50,7 +50,15 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
 	    for (int i = 0; i < OPCODE_COUNT; i++)
 	    {
 	    	Opcode *currentOpcode = myPickler->opcodes[i];
-	        if (currentOpcode->opcode == *it)
+	        if (continueSHORT_BINSTRING == 1)	 
+		{
+			char *someString;
+			StackItem* ptrStackItem;
+			ptrStackItem = &theStack.top();
+			result = (Opcode::fnSHORT_BINSTRING2)(infile,state2,it,currentOpcode,*ptrStackItem,theStack,theMemo);
+			continueSHORT_BINSTRING=0;
+		}
+	        else if (currentOpcode->opcode == *it)
                 {
 		    //printf("opcode: %c\n",*it);
 		    char *someString;
@@ -61,11 +69,19 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
 	    	    theStack.push(*ptrStackItem);
 		    //printf("push\n");
 	            result = (currentOpcode->opfunc)(infile,state2,it,currentOpcode,*ptrStackItem,theStack,theMemo);
+		    if (result == 2)
+		    {
+			continueSHORT_BINSTRING = 1;
+		    }
+		    else
+		    {
+			continueSHORT_BINSTRING = 0;
+		    }
 		    ptrStackItem = &theStack.top();
 		    lastMark = ptrStackItem->lastMark;	
 		}
 	    }
-    	} while ( it < state2.end() && *it > 0 && result != 0);
+    	} while ( it < state2.end() && *it > 0 && (result == 0 || result == 2));
 
 	printf("\n");
     	return 0;
@@ -77,6 +93,7 @@ char* PHPZope::returnPickleFile(stack<StackItem>& theStack,stack<StackItem>& the
 	int j;
 	int boolSTOP;
 	int lastMark = 0;
+	continueSHORT_BINSTRING = 0;
 
 	ifstream infile;
 

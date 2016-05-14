@@ -46,6 +46,7 @@ Pickle::Pickle()
     opcodes[STRING] = new Opcode('S',"STRING",Opcode::fnSTRING,Opcode::oprSTRING);
     opcodes[BINSTRING] = new Opcode('T',"BINSTRING",Opcode::fnBINSTRING,Opcode::oprBINSTRING);
     opcodes[SHORT_BINSTRING] = new Opcode('U',"SHORT_BINSTRING",Opcode::fnSHORT_BINSTRING,Opcode::oprSHORT_BINSTRING);
+    opcodes[SHORT_BINSTRING2] = new Opcode('U',"SHORT_BINSTRING",Opcode::fnSHORT_BINSTRING2,Opcode::oprSHORT_BINSTRING);
     opcodes[UNICODE] = new Opcode('V',"UNICODE",Opcode::fnUNICODE,Opcode::oprUNICODE);
     opcodes[BINUNICODE] = new Opcode('X',"BINUNICODE",Opcode::fnBINUNICODE,Opcode::oprBINUNICODE);
     opcodes[APPEND] = new Opcode('a',"APPEND",Opcode::fnAPPEND,Opcode::oprAPPEND);  
@@ -107,17 +108,16 @@ int Opcode::fnMARK(ifstream &instream,std::string str1,std::string::iterator &it
 	theItem->theMark = stackDepth;
 	theItem->lastMark = stackDepth;
 	
-	return forward;
+	if (forward != 0)
+		return 1;
+	else
+		return 0;
 }
 // every pickle ends with STOP
 int Opcode::fnSTOP(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
 {
-        std:string binput;
-        //cout << "STOP";
         it1++;
-        int forward = 1;
-        //cout << endl;
-        return forward;
+	return 1;
 }
 // discard topmost stack item
 int Opcode::fnPOP(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
@@ -227,7 +227,10 @@ int Opcode::fnPERSID(ifstream &instream,std::string str1,std::string::iterator &
         //cout << "PERSID";
 	//cout << endl;
 	
-	return forward;
+	if (forward != 0)
+		return 1;
+	else
+		return 0;
 }
 int Opcode::fnBINPERSID(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
 {
@@ -256,10 +259,8 @@ int Opcode::fnREDUCE(ifstream &instream,std::string str1,std::string::iterator &
 	theStack.pop();
 	tupleItem=&theStack.top();
 	tupleItem->setAsObject();
-	int forward;
-	forward = 0;
 	
-	return 0;
+	return 1;
 }
 // push string; NL-terminated string argument
 int Opcode::fnSTRING(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
@@ -286,7 +287,10 @@ int Opcode::fnSTRING(ifstream &instream,std::string str1,std::string::iterator &
 	theItem->someString=(char*)emalloc(sizeof(char)*(len+1));
 	strcpy(theItem->someString,buf);
 	//efree(buf);
-	return forward;
+	if (forward != 0)
+		return 1;
+	else
+		return 0;
 }
 // push string; counted binary string argument
 int Opcode::fnBINSTRING(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
@@ -298,6 +302,8 @@ int Opcode::fnBINSTRING(ifstream &instream,std::string str1,std::string::iterato
 //  "     "   ;    "      "       "      " < 256 bytes
 int Opcode::fnSHORT_BINSTRING(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
 {
+	StackItem *theItem;
+	theItem=&theStack.top();
 	int intBinstring;
 	std::string shortBinstring;
         it1++;
@@ -312,6 +318,11 @@ int Opcode::fnSHORT_BINSTRING(ifstream &instream,std::string str1,std::string::i
              it1++;
              forward++;
         }
+	else
+	{
+		// Continues on next line
+		return 2;
+	}
 	int intCountDown;
 	intCountDown = intBinstring;	
 	while (it1 != str1.end() && intCountDown > 0)
@@ -321,11 +332,47 @@ int Opcode::fnSHORT_BINSTRING(ifstream &instream,std::string str1,std::string::i
 	    intCountDown--;
 	    forward++;		
 	}
-	//cout << "SHORT_BINSTRING: ";
-	//cout << shortBinstring;
-        //cout << endl;
-        return forward;
+	intCountDown = intBinstring;	
+	while (it1 != str1.end() && intCountDown > 0)
+	{
+	    shortBinstring.append(sizeof(char),*it1);
+	    it1++;
+	    intCountDown--;
+	}
+	theItem->someString=(char*)emalloc(sizeof(char)*(intBinstring+1));
+	strcpy(theItem->someString,shortBinstring.c_str());
+	return 1;
 }
+// fnSHORT_BINSTRING2 for when it is continued onto the next line
+int Opcode::fnSHORT_BINSTRING2(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
+{
+	StackItem *theItem;
+	theItem=&theStack.top();
+	int forward = 1;
+	int intBinstring;
+	// Next byte contains length
+	// Of the binstring to read
+	std::string shortBinstring;
+        if (it1 != str1.end())
+        {
+             int item;
+             item = *it1;
+	     intBinstring = *it1;
+             it1++;
+        }
+	int intCountDown;
+	intCountDown = intBinstring;	
+	while (it1 != str1.end() && intCountDown > 0)
+	{
+	    shortBinstring.append(sizeof(char),*it1);
+	    it1++;
+	    intCountDown--;
+	}
+	theItem->someString=(char*)emalloc(sizeof(char)*(intBinstring+1));
+	strcpy(theItem->someString,shortBinstring.c_str());
+	return 1;
+}
+
 // push Unicode string; raw-unicode-escaped'd argument
 int Opcode::fnUNICODE(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
 {
@@ -425,7 +472,10 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	    theStack.push(*nameItem);
 	}
 	efree(buf);
-    	return forward;
+	if (forward != 0)
+		return 1;
+	else
+		return 0;
 }
 // build a dict from stack Stack
 int Opcode::fnDICT(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
@@ -434,18 +484,23 @@ int Opcode::fnDICT(ifstream &instream,std::string str1,std::string::iterator &it
 	theItem=&theStack.top();
 	theItem->initializeDict();
 	theItem->opcode='d';
-	
-	return 0;
+        it1++;
+        int forward = 1;
+	if (forward != 0)
+		return 1;
+	else
+		return 0;
 }
 // push empty dict
 int Opcode::fnEMPTY_DICT(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
 {
+	StackItem *theItem,*tupleItem;
+	theItem=&theStack.top();
+	theItem->initializeDict();
+	theItem->opcode='d';
         std:string binput;
         it1++;
-        int forward = 1;
-        //cout << "EMPTY_DICT";
-        //cout << endl;
-        return forward;
+	return 1;
 }
 // extend list on stack by topmost stack slice
 int Opcode::fnAPPENDS(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
@@ -458,6 +513,7 @@ int Opcode::fnAPPENDS(ifstream &instream,std::string str1,std::string::iterator 
 int Opcode::fnGET(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
 {
 	std::string strPut;
+	int getLevel;
 	char theInt[10];
 	int countNewline = 0;
 	int forward = 0;
@@ -471,25 +527,27 @@ int Opcode::fnGET(ifstream &instream,std::string str1,std::string::iterator &it1
 	}
 	sprintf(theInt,"%s",strPut.c_str());
 	// pop the GET opcode from the stack
+	getLevel = atoi(theInt);
 	theStack.pop();
 	// For starters dump contents of memo onto stack.
 	StackItem *memoItem;
 	stack<StackItem> reverseStack;
-	while (!theMemo.empty())
-	{
+	do {
 	    memoItem=&theMemo.top();
 	    // push the memoItem onto the stack
 	    reverseStack.push(*memoItem);
 	    theMemo.pop();
 	}
-	while (!reverseStack.empty())
+	while (!theMemo.empty() && getLevel-- >= 0);
+	do
 	{
 	    memoItem=&reverseStack.top();
-	    //theStack.push(*memoItem);
+	    theStack.push(*memoItem);
 	    reverseStack.pop();
 	}
+	while (!reverseStack.empty());
 	
-	return forward;
+	return 1;
 }
 //   "    "    "    "   "   "  ;   "    " 1-byte arg
 int Opcode::fnBINGET(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
@@ -539,7 +597,10 @@ int Opcode::fnINST(ifstream &instream,std::string str1,std::string::iterator &it
         //cout << "INST";
 	//cout << endl;
 	
-	return forward;
+	if (forward != 0)
+		return 1;
+	else
+		return 0;
 }
 // push item from memo on stack; index is 4-byte arg
 int Opcode::fnLONG_BINGET(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
@@ -576,14 +637,12 @@ int Opcode::fnPUT(ifstream &instream,std::string str1,std::string::iterator &it1
 	std::string strPut;
 	char theInt[10];
 	int countNewline = 0;
-	int forward = 0;
 	while (it1 < str1.end())
         {
 	     int item;
 	     item = *it1;
 	     strPut.append(sizeof(char),*it1);
 	     it1++;
-	     forward++;
 	}
 	sprintf(theInt,"%s",strPut.c_str());
 	// Push new Class onto the Stack
@@ -600,23 +659,21 @@ int Opcode::fnPUT(ifstream &instream,std::string str1,std::string::iterator &it1
         theMemo.push(*prevItem);
 	//prevItem->opcode = 'p';
 	
-	return forward;
+	return 1;
 }
 //   "     "    "   "   " ;   "    " 1-byte arg
 int Opcode::fnBINPUT(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
 {
-        std:string binput;
+	StackItem *theItem;
 	it1++;
-	int forward = 1;
 	// This is one byte long
 	// As said above ... DUH
 	int item;
 	item = *it1;
-	binput.append(sizeof(char),*it1);
-        //cout << "BINPUT: ";
-	//cout << binput;
-	//cout << endl;
-	return forward;
+	theItem = &theStack.top();
+	theItem->someInt = item;
+
+	return 1;
 }
 //   "     "    "   "   " ;   "    " 4-byte arg
 int Opcode::fnLONG_BINPUT(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
@@ -702,7 +759,10 @@ int Opcode::fnSETITEM(ifstream &instream,std::string str1,std::string::iterator 
 
 
 	
-	return forward;
+	if (forward != 0)
+		return 1;
+	else
+		return 0;
 }
 // build tuple from topmost stack Stack
 int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
@@ -710,12 +770,10 @@ int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &i
 	// Everything since the last mark becomes the tuple
 	// What is a tuple?
 	StackItem *theItem,*tupleItem;
-	int forward;
 	int len;
 	int index;
 	char moduleName[100];
 	char className[100];
-        forward = 0;
 	char theOpcode;
 	do
 	{
@@ -749,7 +807,7 @@ int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &i
 
 	tupleItem->opcode = 't';
 
-	return 0;
+	return 1;
 }
 // push empty tuple
 int Opcode::fnEMPTY_TUPLE(ifstream &instream,std::string str1,std::string::iterator &it1,void *classPtr,StackItem &theStackItem,stack<StackItem>& theStack,stack<StackItem>& theMemo)
@@ -940,6 +998,9 @@ int Opcode::oprDICT(zval* subarray,StackItem* stackitem, int depth) {
 	add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprEMPTY_DICT(zval* subarray,StackItem* stackitem, int depth) {
+	char somestring[100];
+	sprintf(somestring,"dict: %s",stackitem->getDict());
+	add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprAPPENDS(zval* subarray,StackItem* stackitem, int depth) {
 }
@@ -961,6 +1022,9 @@ int Opcode::oprPUT(zval* subarray,StackItem* stackitem, int depth) {
 	add_next_index_long(subarray,stackitem->someInt);
 }
 int Opcode::oprBINPUT(zval* subarray,StackItem* stackitem, int depth) {
+	char somestring[100];
+	sprintf(somestring,"int: %i",stackitem->someInt);
+	add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprLONG_BINPUT(zval* subarray,StackItem* stackitem, int depth) {
 }
