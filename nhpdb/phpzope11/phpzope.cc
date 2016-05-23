@@ -16,7 +16,7 @@ stack<StackItem>& PHPZope::retrieveCurrentStack()
 {
 	return this->currentStack;
 }
-stack<StackItem>& PHPZope::retrieveCurrentMemo()
+vector<StackItem>& PHPZope::retrieveCurrentMemo()
 {
 	return this->theMemo;
 }
@@ -32,63 +32,135 @@ int PHPZope::readPickle(char *src)
     	strcpy(this->filename, src);
 	return 0;
 } 
+int PHPZope::getMemoSize()
+{
+	return memoSize;
+}
 
-int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack,int& lastMark,stack<StackItem>& theMemo)
+int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack,int& lastMark,vector<StackItem>& theMemo)
         {
+	std::string::iterator it;
+	std::string theString;
 	std::string filename = "state.txt";
 	StackItem *ptrStackItem;
-	int result;
+	int result = 0;
+	char opcode;
+	char *ptr;
+	char *buf;
 
 	/* fetch the data : retrieve all the rows in the result set */
 
 	Pickle *myPickler = new Pickle();
-	std::string::iterator it;
-	it = state2.begin();
 	int num = 0;
+	std::stringstream parse(state2);
+	int len = parse.gcount();
+	char someChar;
+	int someInt;
+	parse >> someChar;
+	theString = parse.str();
+	it = theString.begin();
+	Opcode *nextOpcode;
+	buf = (char*)emalloc(sizeof(char)*200);
+	strcpy(buf,"BEGIN");
 	do
 	{
 	    for (int i = 0; i < OPCODE_COUNT; i++)
 	    {
 	    	Opcode *currentOpcode = myPickler->opcodes[i];
-	        if (continueSHORT_BINSTRING == 1)	 
+
+		if (result == 2)
 		{
-			char *someString;
-			StackItem* ptrStackItem;
-			ptrStackItem = &theStack.top();
-			result = (Opcode::fnSHORT_BINSTRING2)(infile,state2,it,currentOpcode,*ptrStackItem,theStack,theMemo);
-			continueSHORT_BINSTRING=0;
+	    		for (int i = 0; i < OPCODE_COUNT; i++)
+	    		{
+	    			nextOpcode = myPickler->opcodes[i];
+	        		if (nextOpcode->opcode == someChar)
+				{
+					break;
+				}
+			}
+	            ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
+		    ptrStackItem->opcode = someChar;
+		    ptrStackItem->theMark = 0;
+		    ptrStackItem->lastMark = lastMark;
+	    	    theStack.push(*ptrStackItem);
+	            result = (nextOpcode->opfunc)(infile,theString,it,*ptrStackItem,theStack,theMemo);
+		    result = 1;
 		}
-	        else if (currentOpcode->opcode == *it)
+		else if (result == 3)
+		{
+			someChar = '~';
+	                ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
+		        ptrStackItem->opcode = someChar;
+		        ptrStackItem->theMark = 0;
+		        ptrStackItem->lastMark = lastMark;
+		        ptrStackItem->someString=(char*)emalloc(sizeof(char)*100);
+			strcpy(ptrStackItem->someString,buf);
+	    	        theStack.push(*ptrStackItem);
+	            	result = (Opcode::fnGLOBAL1)(infile,theString,it,*ptrStackItem,theStack,theMemo);
+	            	//result = (currentOpcode->opfunc)(infile,theString,it,*ptrStackItem,theStack,theMemo);
+			result = 1;
+		}
+		else if (result == 4)
+		{
+			someChar = 'U';
+	                ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
+		        ptrStackItem->opcode = someChar;
+		        ptrStackItem->theMark = 0;
+		        ptrStackItem->lastMark = lastMark;
+	    	        theStack.push(*ptrStackItem);
+	            	result = (Opcode::fnSHORT_BINSTRING1)(infile,theString,it,*ptrStackItem,theStack,theMemo);
+			result = 1;
+		}	
+	        else if (currentOpcode->opcode == someChar)
                 {
-		    //printf("opcode: %c\n",*it);
 		    char *someString;
 	            ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
-		    ptrStackItem->opcode = currentOpcode->opcode;
+		    ptrStackItem->opcode = someChar;
 		    ptrStackItem->theMark = 0;
 		    ptrStackItem->lastMark = lastMark;
 	    	    theStack.push(*ptrStackItem);
 		    //printf("push\n");
-	            result = (currentOpcode->opfunc)(infile,state2,it,currentOpcode,*ptrStackItem,theStack,theMemo);
+	            result = (currentOpcode->opfunc)(infile,theString,it,*ptrStackItem,theStack,theMemo);
+		    ptrStackItem->someString=(char*)emalloc(sizeof(char)*100);
+		    strcpy(ptrStackItem->someString,buf);
+
 		    if (result == 2)
 		    {
-			continueSHORT_BINSTRING = 1;
+		        someChar = *it++;
+		    }
+		    else if (result == 3)
+		    {
+		        getline(infile,theString);
+			someChar = '~';
+			it = theString.begin();
+		    }
+		    else if (result == 4)
+		    {
+		        getline(infile,theString);
+			someChar = 'U';
+			it = theString.begin();
 		    }
 		    else
 		    {
+		        someChar = *it;
 			continueSHORT_BINSTRING = 0;
 		    }
+
+		    strcpy(buf,"BEGIN");
+		    // strcpy(buf,ptrStackItem->someString);
 		    ptrStackItem = &theStack.top();
 		    lastMark = ptrStackItem->lastMark;	
 		}
 	    }
-    	} while ( it < state2.end() && *it > 0 && (result == 0 || result == 2));
+    	} while ( *it != '\000' && it != theString.end() && (result == 0 || result == 2 || result == 3 || result == 4));
 
 	printf("\n");
     	return 0;
 } // retrieve_state()
 
-char* PHPZope::returnPickleFile(stack<StackItem>& theStack,stack<StackItem>& theMemo)
+char* PHPZope::returnPickleFile(stack<StackItem>& theStack,vector<StackItem>& theMemo)
 {
+	memoSize = 5;
 	std::string state;
 	int j;
 	int boolSTOP;
@@ -108,8 +180,12 @@ char* PHPZope::returnPickleFile(stack<StackItem>& theStack,stack<StackItem>& the
 	{
 	    while (!infile.eof())
             {
+		theMemo.resize(memoSize);
 		getline(infile,state);
+//		std::stringstream parse(state);
+//	        this->retrieve_state(infile,parse,theStack,lastMark,theMemo);
 	        this->retrieve_state(infile,state,theStack,lastMark,theMemo);
+		memoSize += 1;
 	    }
 	    infile.close();
 	    int i;
@@ -243,7 +319,7 @@ PHP_METHOD(PHPZope, returnPickleFile)
 	//ptrStackItem = (StackItem*)emalloc(sizeof(StackItem));
 	//ptrStackItem->opcode = '!';
 	stack<StackItem> theStack = phpzope->retrieveCurrentStack();
-	stack<StackItem> theMemo = phpzope->retrieveCurrentMemo();
+	vector<StackItem> theMemo = phpzope->retrieveCurrentMemo();
 	//theStack.push(*ptrStackItem);
 	phpzope->returnPickleFile(theStack,theMemo);
 	char somestring[100];
@@ -282,12 +358,12 @@ PHP_METHOD(PHPZope, returnPickleFile)
 	ALLOC_INIT_ZVAL(mysubarray);
 	array_init(mysubarray);
 	add_next_index_string(mysubarray,somestring,1);
-	depth = theMemo.size();
-	int memoDepth = depth;
-	while (memoDepth > 0 )
+	int memoSize;
+	memoSize = phpzope->getMemoSize();
+	for (int k=0; k<memoSize; k++ )
 	{
 	     int result;
-	     StackItem memoItem = theMemo.top();
+	     StackItem memoItem = theMemo[k];
 	     sprintf(somestring,"Memo: currentOpcode: %c",memoItem.opcode);
 	     for (int i = 0; i < OPCODE_COUNT; i++)
 	     {
@@ -301,20 +377,15 @@ PHP_METHOD(PHPZope, returnPickleFile)
 	            result = (currentOpcode->opr)(opcodesubarray,&memoItem,depth);
 		    sprintf(somestring,"opcode: %c, depth: %i, lastMark %i",memoItem.opcode,depth,memoItem.lastMark);
 		    add_assoc_zval(mysubarray,somestring,opcodesubarray); 
-		    //add_assoc_zval(return_value,somestring,opcodesubarray); 
 		}
 	    }
-	    memoDepth--;
-	    theMemo.pop();
 	}
 
 	// Now print the memo
 
 
 	add_assoc_zval(return_value,"theMemo",mysubarray);
-	//add_assoc_zval(return_value,"subarray",mysubarray);
     }
-    //RETURN_NULL();
 } 
 
 zend_function_entry phpzope_methods[] = {

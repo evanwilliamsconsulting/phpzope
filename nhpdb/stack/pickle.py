@@ -1228,6 +1228,9 @@ class Unpickler:
 	item = self.readline()
 	print "item"
 	print item
+	print "just item of memo"
+	print self.memo[item[:1]]
+	print "item-1"
 	print self.memo[item[:-1]]
         self.append(self.memo[item[:-1]])
     dispatch[GET] = load_get

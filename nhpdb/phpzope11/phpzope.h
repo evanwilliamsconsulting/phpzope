@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <regex>
+#include <vector>
 
 #ifndef PHPZOPE_H
 #define PHPZOPE_H
@@ -39,19 +40,21 @@ public:
     ~PHPZope();
     int returnValue();
     int readPickle(char *strFile);
-    char* returnPickleFile(stack<StackItem>& theStack,stack<StackItem>& theMemo);
-    int retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack,int& lastMark,stack<StackItem>& theMemo);
+    char* returnPickleFile(stack<StackItem>& theStack,vector<StackItem>& theMemo);
+    int retrieve_state(ifstream& infile,string& state2,stack<StackItem>& theStack,int& lastMark,vector<StackItem>& theMemo);
     char* returnModuleName();
     char* returnKlassName();
     stack<StackItem> currentStack;
-    stack<StackItem> theMemo;
+    vector<StackItem> theMemo;
     int retrieveStackDepth();
     stack<StackItem>& retrieveCurrentStack();
-    stack<StackItem>& retrieveCurrentMemo();
+    vector<StackItem>& retrieveCurrentMemo();
+    int getMemoSize();
 private:
     char filename[100];
     char buffer[1000];
     int continueSHORT_BINSTRING;
+    int memoSize;
 };
 
 zend_object_handlers phpzope_object_handlers;

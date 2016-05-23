@@ -3,22 +3,33 @@
 Dict& Dict::operator=(const Dict& otherItem)
 {
 	count = otherItem.count;
+	keyIndex = otherItem.keyIndex;
 	return *this;
 }
 void Dict::insertPair(char* theKey,char* theValue)
 {
-	keys[keyIndex] = theKey;
-	values[keyIndex] = theValue;
-	keyIndex++;
+	    int theIndex;
+	    theIndex = getIndex();
+	    char *keyptr,*valueptr;
+	    keyptr=(char*)emalloc(sizeof(char)*200);
+	    strcpy(keyptr,theKey);
+	    keys[theIndex]=keyptr;
+	    valueptr=(char*)emalloc(sizeof(char)*200);
+	    strcpy(valueptr,theValue);
+	    values[theIndex]=valueptr;
+	    incrementIndex();
 }
 char* Dict::printDict()
 {
 	char* buf;
 	buf = output;
+	int theIndex;
+	theIndex--;
+	theIndex = getIndex();
 	buf += sprintf(output,"DICT: ");
-	for (int i = 0; i<keyIndex; i++)
+	for (int i=theIndex;i>=0;i--)
 	{
-	    buf += sprintf(buf," %s => %s ",keys[i],values[i]);
-        }
+		buf += sprintf(buf," |%s => %s| ",keys[i],values[i]);
+	}
 	return output;
 }
