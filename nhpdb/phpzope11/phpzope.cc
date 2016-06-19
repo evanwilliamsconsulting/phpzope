@@ -361,19 +361,11 @@ PHP_METHOD(PHPZope, returnPickleFile)
 	
 	int stackDepth = depth;
 	Pickle *myPickler = new Pickle();
-<<<<<<< HEAD
 	int count = 1;
 	while (stackDepth > 0 )
 	{
 	     int result;
 	     StackItem stackItem = theStack.top();
-=======
-	stackDepth--;
-	StackItem stackItem = theStack.top();
-	do
-	{
-	     int result;
->>>>>>> 1d0b79c46a852d140b9eb27424013c27ceefcc95
 	     sprintf(somestring,"%c",stackItem.opcode);
 	     for (int i = 0; i < OPCODE_COUNT; i++)
 	     {
@@ -383,21 +375,12 @@ PHP_METHOD(PHPZope, returnPickleFile)
 		    //depth = theStack.size();
 		    ALLOC_INIT_ZVAL(opcodesubarray);
 		    array_init(opcodesubarray);
-<<<<<<< HEAD
 		    add_assoc_string(opcodesubarray,"opcode",somestring,1);
 		    add_assoc_long(opcodesubarray,"depth",depth);
 	            result = (currentOpcode->opr)(opcodesubarray,&stackItem,depth);
 		    sprintf(somestring,"%i",count++);
 		    //add_assoc_zval(mysubarray,somestring,opcodesubarray); 
 		    add_assoc_zval(return_value,somestring,opcodesubarray); 
-=======
-		    add_assoc_long(opcodesubarray,"depth",depth);
-		    add_assoc_string(opcodesubarray,"opcode",somestring,1);
-		    //add_next_index_long(opcodesubarray,depth);
-	            result = (currentOpcode->opr)(opcodesubarray,&stackItem,depth);
-		    sprintf(somestring,"%i",count++);
-		    add_assoc_zval(mysubarray,somestring,opcodesubarray); 
->>>>>>> 1d0b79c46a852d140b9eb27424013c27ceefcc95
 		}
 	    }
 	    stackDepth--;
@@ -424,13 +407,8 @@ PHP_METHOD(PHPZope, returnPickleFile)
 		    ALLOC_INIT_ZVAL(opcodesubarray);
 		    array_init(opcodesubarray);
 	            result = (currentOpcode->opr)(opcodesubarray,&memoItem,depth);
-<<<<<<< HEAD
 		    sprintf(somestring,"%i",k);
 		    add_assoc_zval(mysubarray,somestring,opcodesubarray); 
-=======
-		    sprintf(somestring,"opcode: %c, depth: %i, lastMark %i",memoItem.opcode,depth,memoItem.lastMark);
-                    add_assoc_zval(mysubarray,somestring,opcodesubarray); 
->>>>>>> 1d0b79c46a852d140b9eb27424013c27ceefcc95
 		}
 	    }
 	}
