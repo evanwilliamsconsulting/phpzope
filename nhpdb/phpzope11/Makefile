@@ -12,7 +12,7 @@ ZEND_EXT_TYPE = zend_extension
 RE2C = exit 0;
 AWK = gawk
 PHPZOPE_SHARED_LIBADD = -lstdc++
-shared_objects_phpzope = phpzope.lo pickle.lo stackitem.lo dict.lo tuple.lo
+shared_objects_phpzope = phpzope.lo pickle.lo stackitem.lo tuple.lo dict.lo
 PHP_PECL_EXTENSION = phpzope
 PHP_MODULES = $(phplibdir)/phpzope.la
 PHP_ZEND_EX =
@@ -183,10 +183,10 @@ pickle.lo: /zodb/nhpdb/phpzope11/pickle.cc
 	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/zodb/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /zodb/nhpdb/phpzope11/pickle.cc -o pickle.lo 
 stackitem.lo: /zodb/nhpdb/phpzope11/stackitem.cc
 	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/zodb/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /zodb/nhpdb/phpzope11/stackitem.cc -o stackitem.lo 
-dict.lo: /zodb/nhpdb/phpzope11/dict.cc
-	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/zodb/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /zodb/nhpdb/phpzope11/dict.cc -o dict.lo 
 tuple.lo: /zodb/nhpdb/phpzope11/tuple.cc
 	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/zodb/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /zodb/nhpdb/phpzope11/tuple.cc -o tuple.lo 
+dict.lo: /zodb/nhpdb/phpzope11/dict.cc
+	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/zodb/nhpdb/phpzope11 $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /zodb/nhpdb/phpzope11/dict.cc -o dict.lo 
 $(phplibdir)/phpzope.la: ./phpzope.la
 	$(LIBTOOL) --mode=install cp ./phpzope.la $(phplibdir)
 

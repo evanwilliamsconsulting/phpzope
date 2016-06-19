@@ -132,6 +132,7 @@ int Opcode::fnMARK(ifstream &instream,std::string str1,std::string::iterator &it
 	theItem = &theStack.top();
 	theItem->theMark = stackDepth;
 	theItem->lastMark = stackDepth;
+	theItem->opcode = '(';
 	
 	return 1;
 }
@@ -277,15 +278,23 @@ int Opcode::fnBINPERSID(ifstream &instream,std::string str1,std::string::iterato
 // since we are concentrating on a PHP output
 // that means to me that whatever element is called by the tuple
 // should have a matching PHP class that is available to the extension.
+
+// we can pretty much ignore this for now
+// because it is not until the 'b' BUILD opcode occurs
+// that the values are set by setitem in the new object
+
 int Opcode::fnREDUCE(ifstream &instream,std::string str1,std::string::iterator &it1,StackItem &theStackItem,stack<StackItem>& theStack,vector<StackItem>& theMemo)
 {
+/*
 	StackItem *theItem,*tupleItem;
         theItem=&theStack.top();
 	theStack.pop();
 	tupleItem=&theStack.top();
 	tupleItem->setAsObject();
+*/
 	
-	return 1;
+	it1++;
+	return 0;
 }
 // push string; NL-terminated string argument
 int Opcode::fnSTRING(ifstream &instream,std::string str1,std::string::iterator &it1,StackItem &theStackItem,stack<StackItem>& theStack,vector<StackItem>& theMemo)
@@ -441,10 +450,13 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	moduleItem->someString=(char*)emalloc(sizeof(char)*(len+1));
 	moduleItem->lastMark = lastMark;
 	strcpy(moduleItem->someString,buf);
+	int retval;
+	retval = 3;
 	if (0 == strcmp("copy_reg",buf))
 	{
 	    moduleItem->opcode='*';
 	    isNewObj = 1;
+	    retval = 5;
 	}
         else
         {
@@ -452,7 +464,7 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	}
 	efree(buf);
 	theStack.push(*moduleItem);
-	return 3;
+	return retval;
 }
 // build a dict from stack Stack
 int Opcode::fnDICT(ifstream &instream,std::string str1,std::string::iterator &it1,StackItem &theStackItem,stack<StackItem>& theStack,vector<StackItem>& theMemo)
@@ -510,8 +522,20 @@ int Opcode::fnGET(ifstream &instream,std::string str1,std::string::iterator &it1
 	int stackDepth = theStack.size();
 	StackItem *memoItem;
 
-	memoItem=&theMemo[getLevel];
-	theStack.push(*memoItem);
+	int memoSize;
+	memoSize = theMemo.size();
+	int matchk = memoSize - getLevel - 6;
+	for (int k=0; k<memoSize; k++ )
+	{
+	     int result;
+	     if (k == matchk)
+	     {
+	         StackItem memoItem = theMemo[k];
+	         theStack.push(memoItem);
+		 break;
+	     }
+	}
+
 	
 	return 1;
 }
@@ -603,6 +627,7 @@ int Opcode::fnOBJ(ifstream &instream,std::string str1,std::string::iterator &it1
 int Opcode::fnPUT(ifstream &instream,std::string str1,std::string::iterator &it1,StackItem &theStackItem,stack<StackItem>& theStack,vector<StackItem>& theMemo)    
 {
 	// I don't need to store things in the memo.
+	StackItem *newItem;
 	std::string strPut;
 	char theInt[10];
 	int countNewline = 0;
@@ -626,7 +651,12 @@ int Opcode::fnPUT(ifstream &instream,std::string str1,std::string::iterator &it1
 	theStack.pop();
 	prevItem = &theStack.top();
         theMemo.push_back(*prevItem);
-	//prevItem->opcode = 'p';
+
+	newItem = (StackItem*)emalloc(sizeof(StackItem));
+	newItem->opcode = 'p';
+	newItem->someInt = atoi(theInt);
+
+	//theStack.push(*newItem);
 	
 	return 1;
 }
@@ -681,7 +711,6 @@ int Opcode::fnSETITEM(ifstream &instream,std::string str1,std::string::iterator 
 	int onTarget = 1;
 	theItem = &theStack.top();
 	int lastMark = theItem->lastMark;
-	theStack.pop();
 	valueItem = &theStack.top();
 	strcpy(ptrValue,valueItem->someString);
 	theStack.pop();
@@ -694,6 +723,19 @@ int Opcode::fnSETITEM(ifstream &instream,std::string str1,std::string::iterator 
 	{
 	    strcpy(ptrKey,keyItem->someString);
 	}
+	theStack.pop();
+	valueItem = &theStack.top();
+	if (valueItem->someString == 0)
+	{
+	    strcpy(ptrValue,"BLANK_VALUE");
+	}
+	else
+	{
+	    strcpy(ptrValue,valueItem->someString);
+	}
+	theStack.pop();
+	theStack.pop();
+	theStack.pop();
 	newItem = (StackItem*)emalloc(sizeof(StackItem));
 	newItem->opcode = 'd';
 	newItem->initializeDict();	
@@ -706,7 +748,7 @@ int Opcode::fnSETITEM(ifstream &instream,std::string str1,std::string::iterator 
 	efree(bufKey);
 	efree(bufValue);
 
-        return 2;
+        return 0;
 }
 // build tuple from topmost stack Stack
 int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &it1,StackItem &theStackItem,stack<StackItem>& theStack,vector<StackItem>& theMemo)
@@ -719,6 +761,7 @@ int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &i
 	char moduleName[100];
 	char className[100];
 	char theOpcode;
+	
 	do
 	{
 	    theStack.pop();
@@ -734,24 +777,21 @@ int Opcode::fnTUPLE(ifstream &instream,std::string str1,std::string::iterator &i
             {
 		strcpy(className,theItem->someString);
             }
-            /* harvest index from fnPUT
-	    if (theOpcode == 'p')
-            {
-		index = theItem->someInt;
-            }
-	    */
 	} while (theOpcode != '(');
 
-	theStack.pop();
 	tupleItem = &theStack.top();
+
 	tupleItem->initializeTuple();
-	// tupleItem->setIndex(index);
+
 	tupleItem->setModuleName(moduleName);
 	tupleItem->setClassName(className);
+	tupleItem->setIndex(0);
 
 	tupleItem->opcode = 't';
 
-	return 1;
+	// For Now We Note that TUPLE exists!
+	it1++;
+	return 0;
 }
 // push empty tuple
 int Opcode::fnEMPTY_TUPLE(ifstream &instream,std::string str1,std::string::iterator &it1,StackItem &theStackItem,stack<StackItem>& theStack,vector<StackItem>& theMemo)

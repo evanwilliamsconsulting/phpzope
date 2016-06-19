@@ -98,6 +98,9 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
 	    	        theStack.push(*ptrStackItem);
 	            	result = (Opcode::fnGLOBAL1)(infile,theString,it,*ptrStackItem,theStack,theMemo);
 	            	//result = (currentOpcode->opfunc)(infile,theString,it,*ptrStackItem,theStack,theMemo);
+			getline(infile,theString);
+			it = theString.begin();
+			someChar = *it++;
 			result = 1;
 		}
 		else if (result == 4)
@@ -111,6 +114,10 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
 	            	result = (Opcode::fnSHORT_BINSTRING1)(infile,theString,it,*ptrStackItem,theStack,theMemo);
 			result = 1;
 		}	
+		else if (result == 5)
+		{
+			result = 1;
+		}
 	        else if (currentOpcode->opcode == someChar)
                 {
 		    char *someString;
@@ -140,6 +147,12 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
 			someChar = 'U';
 			it = theString.begin();
 		    }
+		    else if (result == 5)
+		    {
+			getline(infile,theString);
+			it = theString.begin();
+			someChar = *it++;
+		    }	
 		    else
 		    {
 		        someChar = *it;
@@ -152,7 +165,7 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
 		    lastMark = ptrStackItem->lastMark;	
 		}
 	    }
-    	} while ( *it != '\000' && it != theString.end() && (result == 0 || result == 2 || result == 3 || result == 4));
+    	} while ( *it != '\000' && it != theString.end() && (result == 0 || result == 2 || result == 3 || result == 4 || result == 5));
 
 	printf("\n");
     	return 0;
@@ -160,7 +173,7 @@ int PHPZope::retrieve_state(ifstream& infile,string& state2,stack<StackItem>& th
 
 char* PHPZope::returnPickleFile(stack<StackItem>& theStack,vector<StackItem>& theMemo)
 {
-	memoSize = 5;
+	memoSize = 15;
 	std::string state;
 	int j;
 	int boolSTOP;
@@ -326,15 +339,16 @@ PHP_METHOD(PHPZope, returnPickleFile)
 	int depth = theStack.size();
 	sprintf(somestring,"stackDepth %i",depth);
 	//add_next_index_string(mysubarray,somestring,1);
-	add_next_index_string(return_value,somestring,1);
+	//add_next_index_string(return_value,somestring,1);
 	
 	int stackDepth = depth;
 	Pickle *myPickler = new Pickle();
+	int count = 1;
 	while (stackDepth > 0 )
 	{
 	     int result;
 	     StackItem stackItem = theStack.top();
-	     sprintf(somestring,"currentOpcode: %c",stackItem.opcode);
+	     sprintf(somestring,"%c",stackItem.opcode);
 	     for (int i = 0; i < OPCODE_COUNT; i++)
 	     {
 	    	Opcode *currentOpcode = myPickler->opcodes[i];
@@ -343,9 +357,10 @@ PHP_METHOD(PHPZope, returnPickleFile)
 		    depth = theStack.size();
 		    ALLOC_INIT_ZVAL(opcodesubarray);
 		    array_init(opcodesubarray);
-		    add_next_index_long(opcodesubarray,depth);
+		    add_assoc_string(opcodesubarray,"opcode",somestring,1);
+		    add_assoc_long(opcodesubarray,"depth",depth);
 	            result = (currentOpcode->opr)(opcodesubarray,&stackItem,depth);
-		    sprintf(somestring,"opcode: %c, depth: %i, lastMark %i",stackItem.opcode,depth,stackItem.lastMark);
+		    sprintf(somestring,"%i",count++);
 		    //add_assoc_zval(mysubarray,somestring,opcodesubarray); 
 		    add_assoc_zval(return_value,somestring,opcodesubarray); 
 		}
@@ -357,14 +372,12 @@ PHP_METHOD(PHPZope, returnPickleFile)
 	// Now print the memo
 	ALLOC_INIT_ZVAL(mysubarray);
 	array_init(mysubarray);
-	add_next_index_string(mysubarray,somestring,1);
 	int memoSize;
 	memoSize = phpzope->getMemoSize();
 	for (int k=0; k<memoSize; k++ )
 	{
 	     int result;
 	     StackItem memoItem = theMemo[k];
-	     sprintf(somestring,"Memo: currentOpcode: %c",memoItem.opcode);
 	     for (int i = 0; i < OPCODE_COUNT; i++)
 	     {
 	    	Opcode *currentOpcode = myPickler->opcodes[i];
@@ -373,9 +386,8 @@ PHP_METHOD(PHPZope, returnPickleFile)
 		    depth = theMemo.size();
 		    ALLOC_INIT_ZVAL(opcodesubarray);
 		    array_init(opcodesubarray);
-		    add_next_index_long(opcodesubarray,depth);
 	            result = (currentOpcode->opr)(opcodesubarray,&memoItem,depth);
-		    sprintf(somestring,"opcode: %c, depth: %i, lastMark %i",memoItem.opcode,depth,memoItem.lastMark);
+		    sprintf(somestring,"%i",k);
 		    add_assoc_zval(mysubarray,somestring,opcodesubarray); 
 		}
 	    }

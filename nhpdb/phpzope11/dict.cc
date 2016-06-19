@@ -27,6 +27,7 @@ char* Dict::printDict()
 	theIndex--;
 	theIndex = getIndex();
 	buf += sprintf(output,"DICT: ");
+	theIndex -= 1;
 	for (int i=theIndex;i>=0;i--)
 	{
 		buf += sprintf(buf," |%s => %s| ",keys[i],values[i]);
