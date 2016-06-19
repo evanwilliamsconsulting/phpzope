@@ -439,7 +439,8 @@ int Opcode::fnGLOBAL(ifstream &instream,std::string str1,std::string::iterator &
 	ptr = buf;
 	int len;
 	len = 0;
-	while (it1 < str1.end() && *it1 != '\177')
+	//while (it1 < str1.end() && *it1 != '\177')
+	while (it1 < str1.end())
         {
 	     *ptr++ = *it1;
 	     len++;
@@ -910,17 +911,20 @@ int Opcode::fnLONG4(ifstream &instream,std::string str1,std::string::iterator &i
 int Opcode::oprGLOBAL1(zval* subarray,StackItem* stackitem, int depth) {
 	char somestring[100];
 	sprintf(somestring,"name: %s",stackitem->someString);
-	add_next_index_string(subarray,somestring,1);
+	add_assoc_string(subarray,"name",stackitem->someString,1);
+	//add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprGLOBAL2(zval* subarray,StackItem* stackitem, int depth) {
 	char somestring[100];
 	sprintf(somestring,"module: %s",stackitem->someString);
-	add_next_index_string(subarray,somestring,1);
+	add_assoc_string(subarray,"module",stackitem->someString,1);
+	//add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprGLOBAL3(zval* subarray,StackItem* stackitem, int depth) {
 	char somestring[100];
-	sprintf(somestring,"module: newobj");
-	add_next_index_string(subarray,somestring,1);
+	sprintf(somestring,"newobj");
+	add_assoc_string(subarray,"module",somestring,1);
+	//add_next_index_string(subarray,somestring,1);
 }
 int Opcode::oprSTOP(zval* subarray,StackItem* stackitem, int depth) {
 }
